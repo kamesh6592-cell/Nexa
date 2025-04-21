@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #4d6bfe;
+}
+
+html {
+  @apply scroll-smooth;
+}
+
+/* hide the scroll bar from the web page */
+::-webkit-scrollbar {
+  display: none;
+}
