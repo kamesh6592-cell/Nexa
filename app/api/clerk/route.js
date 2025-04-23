@@ -46,8 +46,6 @@ export async function POST(request) {
     default:
       break;
   }
-  console.log("Hello");
-  console.log("webhook payload data", data);
 
   return NextResponse.json({ message: "Event received" });
 }
