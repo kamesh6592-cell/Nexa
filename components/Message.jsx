@@ -67,6 +67,7 @@ const Message = ({ role, content }) => {
               <Image
                 src={assets.logo_icon}
                 className="h-9 w-9 p-1 border border-white/15 rounded-full"
+                alt=""
               />
               <div className="space-y-4 w-full overflow-scroll">{content}</div>
             </>

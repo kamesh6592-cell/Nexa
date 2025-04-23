@@ -24,16 +24,18 @@ const Sidebar = ({ expand, setExpand }) => {
           <Image
             className={expand ? "w-36" : "w-10"}
             src={expand ? assets.logo_text : assets.logo_icon}
+            alt=""
           />
 
           <div
             onClick={() => (expand ? setExpand(false) : setExpand(true))}
             className="group relative flex items-center justify-center hover:bg-gray-500/20 transition-all duration-300 h-9 w-9 aspect-square rounded-lg cursor-pointer"
           >
-            <Image src={assets.menu_icon} className="md:hidden" />
+            <Image src={assets.menu_icon} className="md:hidden" alt="" />
             <Image
               src={expand ? assets.sidebar_close_icon : assets.sidebar_icon}
               className="hidden md:block w-7"
+              alt=""
             />
 
             <div
@@ -62,6 +64,7 @@ const Sidebar = ({ expand, setExpand }) => {
           <Image
             className={expand ? "w-6" : "w-7"}
             src={expand ? assets.chat_icon : assets.chat_icon_dull}
+            alt=""
           />
           <div className="absolute w-max -top-12 -right-12 opacity-0 group-hover:opacity-100 transition b-black text-white text-sm px-3 py-2 rounded-lg shadow-lg pointer-events-none">
             New Chat
@@ -91,6 +94,7 @@ const Sidebar = ({ expand, setExpand }) => {
           <Image
             className={expand ? "w-5" : "w-6.5 mx-auto"}
             src={expand ? assets.phone_icon : assets.phone_icon_dull}
+            alt=""
           />
           <div
             className={`absolute -top-60 pb-8 ${
@@ -98,7 +102,7 @@ const Sidebar = ({ expand, setExpand }) => {
             } opacity-0 group-hover:opacity-100 hidden group-hover:block transition`}
           >
             <div className="relative w-max bg-black text-white text-sm p-3 rounded-lg shadow-lg">
-              <Image src={assets.qrcode} className="w-44" />
+              <Image src={assets.qrcode} className="w-44" alt="" />
               <p>Scan to get Clarix App</p>
               <div
                 className={`w-3 h-3 absolute bg-black rotate-45 ${
@@ -123,7 +127,7 @@ const Sidebar = ({ expand, setExpand }) => {
           {user ? (
             <UserButton />
           ) : (
-            <Image src={assets.profile_icon} className="w-7" />
+            <Image src={assets.profile_icon} className="w-7" alt="" />
           )}
 
           {expand && <span>My Profile</span>}
