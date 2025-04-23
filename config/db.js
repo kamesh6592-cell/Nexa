@@ -7,7 +7,7 @@ export default async function connectDB() {
   if (cached.conn) return cached.conn;
   if (!cached.promise) {
     cached.promise = (
-      await mongoose.connect(process.env.MONGODB_URL)
+      await mongoose.connect(process.env.MONGODB_URI)
     ).isObjectIdOrHexString((mongoose) => mongoose);
   }
   try {
