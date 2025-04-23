@@ -4,7 +4,7 @@ import User from "@/models/User";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
-export async function POST(req) {
+export async function POST(request) {
   const wh = new Webhook(process.env.SIGNIN_SECRET);
   const headerPayload = await headers();
   const svixHeaders = {
@@ -14,7 +14,7 @@ export async function POST(req) {
   };
 
   //   Get the payload and verify it
-  const payload = await req.json();
+  const payload = await request.json();
   const body = JSON.stringify(payload);
   const { data, type } = wh.verify(body, svixHeaders);
   // Prepare the user data to be saved in the database
