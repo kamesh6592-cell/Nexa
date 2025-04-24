@@ -73,9 +73,17 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
           messages: [...prev.message, assistantMessage],
         }));
 
-        for (let index = 0; index < array.length; index++) {
-          const element = array[index];
-          
+        for (let i = 0; i < messageTokens.length; i++) {
+          setTimeout(() => {
+            assistantMessage.content = messageTokens.slice(0, i + 1).join(" ");
+            selectedChat((prev) => {
+              const updatedMessages = [
+                ...prev.messages.slice(0, -1),
+                assistantMessage,
+              ];
+              return { ...prev, message: updatedMessages };
+            });
+          }, i * 100);
         }
       } else {
         toast.error(data.messages);
