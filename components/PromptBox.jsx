@@ -3,9 +3,91 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { assets } from "@/assets/assets";
+import { useAppContext } from "@/context/AppContext";
+import toast from "react-hot-toast";
 
 const PromptBox = ({ isLoading, setIsLoading }) => {
   const [prompt, setPrompt] = useState("");
+  const { user, chats, setChats, selectedChat, setSelectedChat } =
+    useAppContext();
+
+  const sendPrompt = async (e) => {
+    const promptCopy = prompt;
+
+    try {
+      e.preventDefault();
+      if (!user) return toast.error("Login to send message");
+      if (isLoading)
+        return toast.error("Wait for the previous prompt response");
+
+      setIsLoading(true);
+      setPrompt("");
+
+      const userPrompt = {
+        role: "user",
+        content: prompt,
+        timeStamp: Date.now(),
+      };
+
+      // Saving user prompt in chats array
+      setChats((prevChats) =>
+        prevChats.map((chat) =>
+          chat._id === selectedChat._id
+            ? {
+                ...chat,
+                messages: [...chat.messages, userPrompt],
+              }
+            : chat
+        )
+      );
+
+      // Saving user prompt in selected  chat
+      setSelectedChat((prev) => ({
+        ...prev,
+        messages: [...prev.messages, userPrompt],
+      }));
+
+      const { data } = await axios.post("/api/chat/ai", {
+        chatId: selectedChat._id,
+        prompt,
+      });
+
+      if (data.success) {
+        setChats((prevChats) =>
+          prevChats.map((chat) =>
+            chat._id === selectedChat._id
+              ? { ...chat, messages: [...chat.messages, data.data] }
+              : chat
+          )
+        );
+        const message = data.data.content;
+        const messageTokens = message.split(" ");
+        let assistantMessage = {
+          role: "assistant",
+          content: "",
+          timeStamp: Date.now(),
+        };
+
+        setSelectedChat((prev) => ({
+          ...prev,
+          messages: [...prev.message, assistantMessage],
+        }));
+
+        for (let index = 0; index < array.length; index++) {
+          const element = array[index];
+          
+        }
+      } else {
+        toast.error(data.messages);
+        setPrompt(promptCopy);
+      }
+    } catch (error) {
+      toast.error(error.messages);
+      setPrompt(promptCopy);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <form
       className={`w-full ${
