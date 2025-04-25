@@ -11,6 +11,13 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
   const { user, chats, setChats, selectedChat, setSelectedChat } =
     useAppContext();
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendPrompt(e);
+    }
+  };
+
   const sendPrompt = async (e) => {
     const promptCopy = prompt;
 
@@ -76,7 +83,7 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
         for (let i = 0; i < messageTokens.length; i++) {
           setTimeout(() => {
             assistantMessage.content = messageTokens.slice(0, i + 1).join(" ");
-            selectedChat((prev) => {
+            setSelectedChat((prev) => {
               const updatedMessages = [
                 ...prev.messages.slice(0, -1),
                 assistantMessage,
@@ -98,11 +105,13 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
   };
   return (
     <form
+      onSubmit={sendPrompt}
       className={`w-full ${
         false ? "max-w-3xl" : "max-w-2xl"
       } bg-[#404045] p-4 rounded-3xl mt-4 transition-all`}
     >
       <textarea
+        onKeyDown={handleKeyDown}
         className="outline-none w-full resize-none overflow-hidden break-words bg-transparent"
         rows={2}
         placeholder="Message Clarix"
