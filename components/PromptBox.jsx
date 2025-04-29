@@ -5,6 +5,7 @@ import Image from "next/image";
 import { assets } from "@/assets/assets";
 import { useAppContext } from "@/context/AppContext";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const PromptBox = ({ isLoading, setIsLoading }) => {
   const [prompt, setPrompt] = useState("");
@@ -77,7 +78,7 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
 
         setSelectedChat((prev) => ({
           ...prev,
-          messages: [...prev.message, assistantMessage],
+          messages: [...prev.messages, assistantMessage],
         }));
 
         for (let i = 0; i < messageTokens.length; i++) {
@@ -88,15 +89,17 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
                 ...prev.messages.slice(0, -1),
                 assistantMessage,
               ];
-              return { ...prev, message: updatedMessages };
+              return { ...prev, messages: updatedMessages };
             });
           }, i * 100);
         }
       } else {
-        toast.error(data.messages);
+        console.log("ERROR", data.message);
+        toast.error(data.message);
         setPrompt(promptCopy);
       }
     } catch (error) {
+      console.log("ERROR", error.message);
       toast.error(error.messages);
       setPrompt(promptCopy);
     } finally {
