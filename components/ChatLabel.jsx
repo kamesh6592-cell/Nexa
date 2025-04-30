@@ -67,7 +67,7 @@ const ChatLabel = ({ openMenu, setOpenMenu, id, name }) => {
         className="group relative flex items-center justify-center h-6 w-6 aspect-square hover:bg-black/80 rounded-lg"
       >
         <Image
-          alt=""
+          alt="three dots"
           src={assets.three_dots}
           className={`w-4 ${
             openMenu.id === id && openMenu.open ? "" : "hidden"
@@ -82,7 +82,7 @@ const ChatLabel = ({ openMenu, setOpenMenu, id, name }) => {
             onClick={renameHandler}
             className="flex items-center gap-3 hover:bg-white/10 px-3 py-2 rounded-lg"
           >
-            <Image src={assets.pencil_icon} className="w-4" alt="" />
+            <Image src={assets.pencil_icon} className="w-4" alt="pencil" />
             <p>Rename</p>
           </div>
 
@@ -90,7 +90,7 @@ const ChatLabel = ({ openMenu, setOpenMenu, id, name }) => {
             onClick={deleteHandler}
             className="flex items-center gap-3 hover:bg-white/10 px-3 py-2 rounded-lg"
           >
-            <Image src={assets.delete_icon} className="w-4" alt="" />
+            <Image src={assets.delete_icon} className="w-4" alt="delete" />
             <p>Delete</p>
           </div>
         </div>
