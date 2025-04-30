@@ -37,12 +37,12 @@ const Message = ({ role, content }) => {
                   <Image
                     onClick={copyMessage}
                     src={assets.copy_icon}
-                    alt=""
+                    alt="copy"
                     className="w-4 cursor-pointer"
                   />
                   <Image
                     src={assets.pencil_icon}
-                    alt=""
+                    alt="pencil"
                     className="w-4.5 cursor-pointer"
                   />
                 </>
@@ -51,22 +51,22 @@ const Message = ({ role, content }) => {
                   <Image
                     onClick={copyMessage}
                     src={assets.copy_icon}
-                    alt=""
+                    alt="copy"
                     className="w-4.5 cursor-pointer"
                   />
                   <Image
                     src={assets.regenerate_icon}
-                    alt=""
+                    alt="regenerate"
                     className="w-4 cursor-pointer"
                   />
                   <Image
                     src={assets.like_icon}
-                    alt=""
+                    alt="like"
                     className="w-4 cursor-pointer"
                   />
                   <Image
                     src={assets.dislike_icon}
-                    alt=""
+                    alt="dislike"
                     className="w-4 cursor-pointer"
                   />
                 </>
@@ -80,7 +80,7 @@ const Message = ({ role, content }) => {
               <Image
                 src={assets.logo_icon}
                 className="h-9 w-9 p-1 border border-white/15 rounded-full"
-                alt=""
+                alt="logo"
               />
               <div className="space-y-4 w-full overflow-scroll">
                 <Markdown>{content}</Markdown>
