@@ -94,7 +94,7 @@ export default function Home() {
 
           <PromptBox isLoading={isLoading} setIsLoading={setIsLoading} />
           <p className="text-xs absolute bottom-1 text-gray-500">
-            AI-generated, for reference only
+            AI-generated, for reference only | © Randima Dias
           </p>
         </div>
       </div>
