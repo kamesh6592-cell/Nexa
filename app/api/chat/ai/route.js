@@ -2,11 +2,11 @@
 // To increase the wait time for the response
 export const maxDuration = 60;
 
-import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import connectDB from "@/config/db";
 import Chat from "@/models/Chat";
+import { supabase } from "@/lib/supabase";
 
 // Initialize OpenAI client with NEXA API key and base URL
 const openai = new OpenAI({
@@ -16,20 +16,40 @@ const openai = new OpenAI({
 
 export async function POST(req) {
   try {
-    const { userId } = getAuth(req);
+    // Get authorization header
+    const authHeader = req.headers.get('authorization');
+    const token = authHeader?.replace('Bearer ', '');
 
-    // Extract chatId and prompt from the request body
-    const { chatId, prompt } = await req.json();
-    if (!userId) {
+    if (!token) {
       return NextResponse.json({
         success: false,
-        message: "User not authenticated",
+        message: "No authorization token provided",
       });
     }
 
+    // Verify token with Supabase
+    const { data: { user }, error } = await supabase.auth.getUser(token);
+    
+    if (error || !user) {
+      return NextResponse.json({
+        success: false,
+        message: "Invalid or expired token",
+      });
+    }
+
+    // Extract chatId and prompt from the request body
+    const { chatId, prompt } = await req.json();
+
     // Find the chat document in the database based on userId and chatId
     await connectDB();
-    const data = await Chat.findOne({ userId, _id: chatId });
+    const data = await Chat.findOne({ userId: user.id, _id: chatId });
+
+    if (!data) {
+      return NextResponse.json({
+        success: false,
+        message: "Chat not found",
+      });
+    }
 
     // Create a user message object
     const userPrompt = {
@@ -54,6 +74,7 @@ export async function POST(req) {
 
     return NextResponse.json({ success: true, data: message });
   } catch (error) {
+    console.error("Chat AI Error:", error);
     return NextResponse.json({ success: false, message: error.message });
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { useAuth, useUser } from "@clerk/nextjs";
+import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/lib/supabase";
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -12,8 +13,7 @@ export const useAppContext = () => {
 };
 
 export const AppContextProvider = ({ children }) => {
-  const { user } = useUser();
-  const { getToken } = useAuth();
+  const { user } = useAuth();
 
   const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
@@ -21,7 +21,9 @@ export const AppContextProvider = ({ children }) => {
   const createNewChat = async () => {
     try {
       if (!user) return null;
-      const token = await getToken();
+      
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
 
       await axios.post(
         "/api/chat/create",
@@ -40,7 +42,9 @@ export const AppContextProvider = ({ children }) => {
 
   const fetchUsersChats = async () => {
     try {
-      const token = await getToken();
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      
       const { data } = await axios.get("/api/chat/get", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -78,6 +82,7 @@ export const AppContextProvider = ({ children }) => {
       fetchUsersChats();
     }
   }, [user]);
+  
   const value = {
     user,
     chats,

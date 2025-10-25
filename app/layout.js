@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "./prism.css";
-import { ClerkProvider } from "@clerk/nextjs";
+import { AuthProvider } from "@/context/AuthContext";
 import { AppContextProvider } from "@/context/AppContext";
 import { Toaster } from "react-hot-toast";
 
@@ -25,7 +25,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider>
+    <AuthProvider>
       <AppContextProvider>
         <html lang="en">
           <body className={`${inter.className} antialiased`}>
@@ -39,6 +39,6 @@ export default function RootLayout({ children }) {
           </body>
         </html>
       </AppContextProvider>
-    </ClerkProvider>
+    </AuthProvider>
   );
 }

@@ -1,21 +1,34 @@
 import connectDB from "@/config/db";
 import Chat from "@/models/Chat";
-import { getAuth } from "@clerk/nextjs/server";
+import { supabase } from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    const { userId } = getAuth(req);
-    if (!userId) {
+    // Get authorization header
+    const authHeader = req.headers.get('authorization');
+    const token = authHeader?.replace('Bearer ', '');
+
+    if (!token) {
       return NextResponse.json({
         success: false,
-        message: "User not authenticated",
+        message: "No authorization token provided",
+      });
+    }
+
+    // Verify token with Supabase
+    const { data: { user }, error } = await supabase.auth.getUser(token);
+    
+    if (error || !user) {
+      return NextResponse.json({
+        success: false,
+        message: "Invalid or expired token",
       });
     }
 
     // Prepare the chat data to be saved in the database
     const chatData = {
-      userId,
+      userId: user.id,
       messages: [],
       name: "New Chat",
     };
@@ -26,6 +39,7 @@ export async function POST(req) {
 
     return NextResponse.json({ success: true, message: "Chat created" });
   } catch (error) {
+    console.error("Create chat error:", error);
     return NextResponse.json({ success: false, error: error.message });
   }
 }

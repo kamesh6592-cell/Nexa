@@ -1,14 +1,16 @@
 # NEXA - AI-Powered Chat Application
 
-This is a Next.js-based AI chat application powered by NEXA AI, built with modern web technologies including React, MongoDB, and Clerk authentication.
+This is a Next.js-based AI chat application powered by NEXA AI, built with modern web technologies including React, MongoDB, and Supabase authentication.
 
 ## Features
 
 - 🤖 AI-powered conversations using NEXA AI
-- 🔐 Secure authentication with Clerk
+- 🔐 Secure authentication with Supabase Auth
 - 💾 Chat history persistence with MongoDB
 - 📱 Responsive design for all devices
 - 🎨 Modern UI with Tailwind CSS
+- 🔒 Social login support (Google, GitHub)
+- 📧 Email/password authentication
 
 ## Getting Started
 
@@ -54,16 +56,15 @@ Create a `.env.local` file in the root directory with the following variables:
 ```
 NEXA_API_KEY=your_nexa_api_key
 MONGODB_URI=your_mongodb_connection_string
-SIGNIN_SECRET=your_clerk_signin_secret
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-CLERK_SECRET_KEY=your_clerk_secret_key
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ## Tech Stack
 
 - **Frontend**: Next.js 15, React 19, Tailwind CSS
 - **AI**: NEXA AI via OpenRouter
-- **Authentication**: Clerk
+- **Authentication**: Supabase Auth
 - **Database**: MongoDB with Mongoose
 - **Deployment**: Vercel-ready
 
@@ -72,9 +73,25 @@ CLERK_SECRET_KEY=your_clerk_secret_key
 To learn more about the technologies used:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API
-- [Clerk Documentation](https://clerk.com/docs) - authentication and user management
+- [Supabase Documentation](https://supabase.com/docs) - authentication and database management
 - [MongoDB Documentation](https://docs.mongodb.com/) - database operations
 - [Tailwind CSS](https://tailwindcss.com/docs) - utility-first CSS framework
+
+## Supabase Setup
+
+1. Create a new project at [Supabase](https://supabase.com)
+2. Get your project URL and anon key from Settings > API
+3. Enable Authentication providers you want to use (Email, Google, GitHub, etc.)
+4. Set up OAuth apps for social providers if needed
+5. Add your Supabase credentials to `.env.local`
+
+### Authentication Flow
+
+The app uses Supabase Auth with:
+- Email/password authentication
+- Social login (Google, GitHub)
+- Automatic session management
+- Protected API routes
 
 ## Deploy on Vercel
 

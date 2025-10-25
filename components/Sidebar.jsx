@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { assets } from "@/assets/assets";
-import { useClerk, UserButton } from "@clerk/nextjs";
+import { useAuth } from "@/context/AuthContext";
 import { useAppContext } from "@/context/AppContext";
 import ChatLabel from "./ChatLabel";
+import AuthModal from "./AuthModal";
 
 const Sidebar = ({ expand, setExpand }) => {
-  const { openSignIn } = useClerk();
-  const { user, chats, createNewChat } = useAppContext();
+  const { user, signOut } = useAuth();
+  const { chats, createNewChat } = useAppContext();
   const [openMenu, setOpenMenu] = useState({ id: 0, open: false });
+  const [showAuthModal, setShowAuthModal] = useState(false);
   return (
     <div
       className={`flex flex-col justify-between bg-[#212327] pt-4 md:pt-7 transition-all z-50 ${
@@ -134,22 +136,44 @@ const Sidebar = ({ expand, setExpand }) => {
         </div>
 
         <div
-          onClick={user ? null : openSignIn}
+          onClick={user ? null : () => setShowAuthModal(true)}
           className={`flex items-center touch-manipulation ${
             expand ? "hover:bg-white/10 rounded-lg" : "justify-center w-full"
           } gap-3 text-white/60 text-sm p-2 mt-2 cursor-pointer`}
         >
           {user ? (
             <div className="min-h-[44px] min-w-[44px] flex items-center justify-center">
-              <UserButton />
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-semibold">
+                {user.email?.charAt(0).toUpperCase()}
+              </div>
             </div>
           ) : (
             <Image src={assets.profile_icon} className="w-7" alt="profile" />
           )}
 
-          {expand && <span>My Profile</span>}
+          {expand && (
+            <div className="flex items-center justify-between w-full">
+              <span>{user ? user.email : "Sign In"}</span>
+              {user && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    signOut();
+                  }}
+                  className="text-xs text-white/40 hover:text-white/60"
+                >
+                  Sign Out
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
+
+      <AuthModal 
+        isOpen={showAuthModal} 
+        onClose={() => setShowAuthModal(false)} 
+      />
     </div>
   );
 };
