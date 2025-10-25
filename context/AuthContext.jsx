@@ -17,6 +17,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false)
 
   useEffect(() => {
     if (!isSupabaseConfigured()) {
@@ -31,6 +32,7 @@ export const AuthProvider = ({ children }) => {
         const { data: { session }, error } = await supabase.auth.getSession()
         if (error) throw error
         setUser(session?.user ?? null)
+        setInitialLoadComplete(true)
       } catch (error) {
         console.error('Error getting initial session:', error)
       } finally {
@@ -46,10 +48,13 @@ export const AuthProvider = ({ children }) => {
         setUser(session?.user ?? null)
         setLoading(false)
 
-        if (event === 'SIGNED_IN') {
-          toast.success('Successfully signed in!')
-        } else if (event === 'SIGNED_OUT') {
-          toast.success('Successfully signed out!')
+        // Only show toast for actual sign-in/sign-out events after initial load
+        if (initialLoadComplete) {
+          if (event === 'SIGNED_IN') {
+            toast.success('Successfully signed in!')
+          } else if (event === 'SIGNED_OUT') {
+            toast.success('Successfully signed out!')
+          }
         }
       }
     )
