@@ -18,6 +18,12 @@ const Sidebar = ({ expand, setExpand }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const profileMenuRef = useRef(null);
 
+  // Extract username from email (everything before @)
+  const getDisplayName = (email) => {
+    if (!email) return "";
+    return email.split('@')[0];
+  };
+
   // Close profile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -195,7 +201,7 @@ const Sidebar = ({ expand, setExpand }) => {
             {user ? (
               <div className="min-h-[44px] min-w-[44px] flex items-center justify-center">
                 <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-semibold">
-                  {user.email?.charAt(0).toUpperCase()}
+                  {getDisplayName(user.email)?.charAt(0).toUpperCase()}
                 </div>
               </div>
             ) : (
@@ -204,7 +210,7 @@ const Sidebar = ({ expand, setExpand }) => {
 
             {expand && (
               <div className="flex items-center justify-between w-full">
-                <span>{user ? user.email : "Sign In"}</span>
+                <span>{user ? getDisplayName(user.email) : "Sign In"}</span>
                 {user && (
                   <svg
                     className={`w-4 h-4 transition-transform ${

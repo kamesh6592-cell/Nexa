@@ -14,6 +14,12 @@ const SettingsModal = ({ isOpen, onClose }) => {
   const { user, signOut } = useAuth()
   const [activeTab, setActiveTab] = useState('general')
 
+  // Extract username from email (everything before @)
+  const getDisplayName = (email) => {
+    if (!email) return "";
+    return email.split('@')[0];
+  };
+
   if (!isOpen) return null
 
   const handleSignOut = async () => {
@@ -251,13 +257,19 @@ const SettingsModal = ({ isOpen, onClose }) => {
                   
                   {user ? (
                     <div className="space-y-4">
-                      <div className="flex items-center gap-4 p-4 bg-[#404045] rounded-lg">
+                      <div className={`flex items-center gap-4 p-4 rounded-lg ${
+                        theme === 'dark' ? 'bg-[#404045]' : 'bg-gray-100'
+                      }`}>
                         <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold text-lg">
-                          {user.email?.charAt(0).toUpperCase()}
+                          {getDisplayName(user.email)?.charAt(0).toUpperCase()}
                         </div>
                         <div className="flex-1">
-                          <p className="text-white font-medium">{user.email}</p>
-                          <p className="text-sm text-white/60">Signed in via Supabase</p>
+                          <p className={`font-medium ${
+                            theme === 'dark' ? 'text-white' : 'text-gray-900'
+                          }`}>{getDisplayName(user.email)}</p>
+                          <p className={`text-sm ${
+                            theme === 'dark' ? 'text-white/60' : 'text-gray-500'
+                          }`}>Signed in via Supabase</p>
                         </div>
                       </div>
 

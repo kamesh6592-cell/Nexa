@@ -23,11 +23,8 @@ if (process.env.GEMINI_API_KEY) {
 
 export async function POST(req) {
   try {
-    console.log("AI API called");
-    
     // Check if Supabase is configured
     if (!isSupabaseConfigured()) {
-      console.log("Supabase not configured");
       return NextResponse.json({
         success: false,
         message: "Authentication not configured. Please set up Supabase environment variables.",
@@ -38,10 +35,7 @@ export async function POST(req) {
     const authHeader = req.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
 
-    console.log("Token:", token ? "Present" : "Missing");
-
     if (!token) {
-      console.log("No token provided");
       return NextResponse.json({
         success: false,
         message: "No authorization token provided",
@@ -50,9 +44,6 @@ export async function POST(req) {
 
     // Verify token with Supabase
     const { data: { user }, error } = await supabase.auth.getUser(token);
-    
-    console.log("User:", user ? "Authenticated" : "Not authenticated");
-    console.log("Auth error:", error);
     
     if (error || !user) {
       return NextResponse.json({
@@ -64,20 +55,13 @@ export async function POST(req) {
     // Extract chatId, prompt, and model from the request body
     const { chatId, prompt, model = "openai/gpt-4o-mini" } = await req.json();
 
-    console.log("Request data:", { chatId: chatId ? "Present" : "Missing", prompt: prompt ? "Present" : "Missing", model });
-
     // Define supported models and their API requirements
     const modelConfig = {
       "openai/gpt-4o-mini": { api: "openrouter", requiresKey: "OPENROUTER_API_KEY" },
-      "google/gemini-2.0-flash-exp": { api: "openrouter", requiresKey: "OPENROUTER_API_KEY" },
-      "gemini-2.0-flash-exp": { api: "gemini", requiresKey: "GEMINI_API_KEY" },
-      "gemini-1.5-pro": { api: "gemini", requiresKey: "GEMINI_API_KEY" },
-      "gemini-1.5-flash": { api: "gemini", requiresKey: "GEMINI_API_KEY" }
+      "gemini-2.0-flash-exp": { api: "gemini", requiresKey: "GEMINI_API_KEY" }
     };
 
     const config = modelConfig[model];
-    console.log("Model config:", config);
-    
     if (!config) {
       return NextResponse.json({
         success: false,
@@ -86,8 +70,6 @@ export async function POST(req) {
     }
 
     // Check if required API key is configured
-    console.log("Required key:", config.requiresKey, "Available:", process.env[config.requiresKey] ? "Yes" : "No");
-    
     if (!process.env[config.requiresKey]) {
       return NextResponse.json({
         success: false,
