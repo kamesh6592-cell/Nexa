@@ -4,24 +4,25 @@ import React from 'react'
 import { SearchSection } from './SearchSection'
 import { SearchSkeleton } from './SearchResults'
 
-interface ToolSectionProps {
-  tool: {
-    toolName: string
-    state: 'call' | 'result'
-    result?: any
-    args?: any
-  }
-  isOpen: boolean
-  onOpenChange: (open: boolean) => void
-  chatId?: string
-}
+/**
+ * ToolSection component props
+ * @typedef {Object} ToolSectionProps
+ * @property {Object} tool - Tool invocation object
+ * @property {string} tool.toolName - Name of the tool
+ * @property {'call' | 'result'} tool.state - Tool execution state
+ * @property {any} [tool.result] - Tool result data
+ * @property {any} [tool.args] - Tool arguments
+ * @property {boolean} isOpen - Whether section is open
+ * @property {Function} onOpenChange - Open state change handler
+ * @property {string} [chatId] - Chat ID
+ */
 
 export function ToolSection({
   tool,
   isOpen,
   onOpenChange,
   chatId
-}: ToolSectionProps) {
+}) {
   switch (tool.toolName) {
     case 'search':
       const isLoading = tool.state === 'call'

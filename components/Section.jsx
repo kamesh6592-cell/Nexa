@@ -4,19 +4,23 @@ import React from 'react'
 import { Search, Image as ImageIcon, Film, Newspaper, BookCheck, File } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-interface SectionProps {
-  title?: string
-  children: React.ReactNode
-  className?: string
-}
+/**
+ * Section component props
+ * @typedef {Object} SectionProps
+ * @property {string} [title] - Section title
+ * @property {React.ReactNode} children - Section content
+ * @property {string} [className] - Additional CSS classes
+ */
 
-interface ToolArgsSectionProps {
-  tool: string
-  number?: number
-  children?: React.ReactNode
-}
+/**
+ * ToolArgsSection component props  
+ * @typedef {Object} ToolArgsSectionProps
+ * @property {string} tool - Tool name
+ * @property {number} [number] - Number of results
+ * @property {React.ReactNode} [children] - Content
+ */
 
-export function Section({ title, children, className }: SectionProps) {
+export function Section({ title, children, className }) {
   if (!title) {
     return <div className={cn("space-y-3", className)}>{children}</div>
   }
@@ -56,7 +60,7 @@ export function Section({ title, children, className }: SectionProps) {
   )
 }
 
-export function ToolArgsSection({ tool, number, children }: ToolArgsSectionProps) {
+export function ToolArgsSection({ tool, number, children }) {
   const getToolIcon = () => {
     switch (tool) {
       case 'search':

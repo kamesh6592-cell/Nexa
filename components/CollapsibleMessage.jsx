@@ -4,16 +4,18 @@ import React, { useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-interface CollapsibleMessageProps {
-  role: 'user' | 'assistant'
-  isCollapsible?: boolean
-  header?: React.ReactNode
-  isOpen?: boolean
-  onOpenChange?: (open: boolean) => void
-  showIcon?: boolean
-  children: React.ReactNode
-  className?: string
-}
+/**
+ * CollapsibleMessage component props
+ * @typedef {Object} CollapsibleMessageProps
+ * @property {'user' | 'assistant'} role - Message role
+ * @property {boolean} [isCollapsible=true] - Whether the message can be collapsed
+ * @property {React.ReactNode} [header] - Header content
+ * @property {boolean} [isOpen] - Controlled open state
+ * @property {Function} [onOpenChange] - Open state change handler
+ * @property {boolean} [showIcon=true] - Whether to show collapse icon
+ * @property {React.ReactNode} children - Message content
+ * @property {string} [className] - Additional CSS classes
+ */
 
 export function CollapsibleMessage({
   role,
@@ -24,7 +26,7 @@ export function CollapsibleMessage({
   showIcon = true,
   children,
   className
-}: CollapsibleMessageProps) {
+}) {
   const [internalIsOpen, setInternalIsOpen] = useState(true)
   
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen
