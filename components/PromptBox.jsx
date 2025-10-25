@@ -111,11 +111,11 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
       onSubmit={sendPrompt}
       className={`w-full ${
         selectedChat?.messages.length > 0 ? "max-w-3xl" : "max-w-2xl"
-      } bg-[#404045] p-3 md:p-4 rounded-2xl md:rounded-3xl mt-2 md:mt-4 transition-all`}
+      } bg-[#404045] p-3 md:p-4 rounded-2xl md:rounded-3xl transition-all shadow-lg border border-gray-600/20`}
     >
       <textarea
         onKeyDown={handleKeyDown}
-        className="outline-none w-full resize-none overflow-hidden break-words bg-transparent text-sm md:text-base"
+        className="outline-none w-full resize-none overflow-hidden break-words bg-transparent text-sm md:text-base placeholder-white/50"
         rows={2}
         placeholder="Message NEXA"
         required
@@ -124,7 +124,7 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
         style={{ fontSize: '16px' }} // Prevent zoom on iOS
       />
 
-      <div className="flex items-center justify-between text-sm">
+      <div className="flex items-center justify-between text-sm mt-2">
         <div className="flex items-center gap-2">
           {/* Feature toggles can be added here */}
         </div>
@@ -134,7 +134,7 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
             type="submit"
             className={`${
               prompt ? "bg-primary" : "bg-[#71717a]"
-            } rounded-full p-2 cursor-pointer touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center`}
+            } rounded-full p-2 cursor-pointer touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center transition-colors hover:opacity-90`}
             disabled={isLoading}
           >
             <Image
