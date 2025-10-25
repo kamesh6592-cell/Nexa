@@ -300,6 +300,7 @@ html, body {
 .reasoning-toggle {
   transition: all 0.2s ease;
   user-select: none;
+  padding: 0.5rem 0;
 }
 
 .reasoning-toggle:hover {
@@ -307,9 +308,11 @@ html, body {
 }
 
 .reasoning-content {
-  background: rgba(249, 250, 251, 0.02);
-  border-left: 2px solid rgba(59, 130, 246, 0.3);
-  animation: expandIn 0.2s ease-out;
+  background: rgba(17, 24, 39, 0.4);
+  border-left: 3px solid rgba(59, 130, 246, 0.5);
+  backdrop-filter: blur(8px);
+  animation: expandIn 0.3s ease-out;
+  margin-left: 1rem;
 }
 
 @keyframes expandIn {
@@ -322,16 +325,34 @@ html, body {
   to {
     opacity: 1;
     max-height: 1000px;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
   }
 }
 
 .reasoning-dot {
   background: #3b82f6;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
+}
+
+/* Orange Deepdive Button Styling */
+.deepdive-active {
+  border: 2px solid #f97316 !important;
+  background: rgba(249, 115, 22, 0.1) !important;
+  color: #f97316 !important;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.deepdive-inactive {
+  border: 1px solid rgba(156, 163, 175, 0.3);
+  color: rgba(156, 163, 175, 0.7);
+}
+
+.deepdive-inactive:hover {
+  background: rgba(107, 114, 128, 0.1);
+  border-color: rgba(156, 163, 175, 0.5);
 }
 
 /* Enhanced Code Blocks */

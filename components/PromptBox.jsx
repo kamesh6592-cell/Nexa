@@ -151,10 +151,10 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
         <div className="flex items-center gap-2">
           <p 
             onClick={toggleReasoning}
-            className={`flex items-center gap-2 text-xs px-2 py-1 rounded-full cursor-pointer transition ${
+            className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-full cursor-pointer transition-all duration-200 ${
               isReasoningEnabled 
-                ? "border-primary bg-primary/10 text-primary" 
-                : "border border-gray-300/40 hover:bg-gray-500/20"
+                ? "deepdive-active" 
+                : "deepdive-inactive"
             }`}
           >
             <Image

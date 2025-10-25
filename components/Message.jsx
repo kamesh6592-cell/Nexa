@@ -19,6 +19,39 @@ const Message = ({ role, content, reasoning = false, searchData = null }) => {
   };
   return (
     <div className="flex flex-col items-center w-full max-w-4xl message-container">
+      {/* Reasoning Process - Separate from main message */}
+      {reasoning && role === "assistant" && (
+        <div className="w-full max-w-3xl mb-4">
+          <div 
+            className="flex items-center gap-2 text-sm text-gray-400 cursor-pointer reasoning-toggle hover:text-gray-300 transition-colors"
+            onClick={() => setIsReasoningExpanded(!isReasoningExpanded)}
+          >
+            <div className="w-4 h-4 flex items-center justify-center">
+              <div className="reasoning-dot"></div>
+            </div>
+            <span>Thought for 5 seconds</span>
+            <svg 
+              className={`w-4 h-4 transition-transform duration-200 ${isReasoningExpanded ? 'rotate-180' : ''}`}
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+          
+          {/* Expandable reasoning content */}
+          {isReasoningExpanded && (
+            <div className="reasoning-content pl-6 py-3 mt-2 text-sm text-gray-400 leading-relaxed bg-gray-900/30 rounded-lg border border-gray-700/30">
+              <div className="whitespace-pre-wrap">
+                {reasoning}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Main Message Container */}
       <div
         className={`flex flex-col w-full mb-8 ${
           role === "user" && "items-end"
@@ -92,38 +125,6 @@ const Message = ({ role, content, reasoning = false, searchData = null }) => {
                 />
               </div>
               <div className="w-full min-w-0">
-                {reasoning && (
-                  <div className="mb-4">
-                    {/* DeepSeek-style collapsible reasoning */}
-                    <div 
-                      className="flex items-center gap-2 text-sm text-gray-400 cursor-pointer reasoning-toggle mb-3"
-                      onClick={() => setIsReasoningExpanded(!isReasoningExpanded)}
-                    >
-                      <div className="w-4 h-4 flex items-center justify-center">
-                        <div className="reasoning-dot"></div>
-                      </div>
-                      <span>Thought for 5 seconds</span>
-                      <svg 
-                        className={`w-4 h-4 transition-transform duration-200 ${isReasoningExpanded ? 'rotate-180' : ''}`}
-                        fill="none" 
-                        stroke="currentColor" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                    
-                    {/* Expandable reasoning content */}
-                    {isReasoningExpanded && (
-                      <div className="reasoning-content pl-4 py-2 mb-4 text-sm text-gray-400 leading-relaxed">
-                        <div className="whitespace-pre-wrap">
-                          {reasoning}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-                
                 {/* Search Results Section */}
                 {searchData && (
                   <div className="mb-4 search-results-container optimized-animation">
