@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { assets } from "@/assets/assets";
 import Markdown from "react-markdown";
@@ -7,6 +7,8 @@ import toast from "react-hot-toast";
 import { SearchSection } from "./SearchSection";
 
 const Message = ({ role, content, reasoning = false, searchData = null }) => {
+  const [isReasoningExpanded, setIsReasoningExpanded] = useState(false);
+  
   useEffect(() => {
     Prism.highlightAll();
   }, [content]);
@@ -92,23 +94,33 @@ const Message = ({ role, content, reasoning = false, searchData = null }) => {
               <div className="w-full min-w-0">
                 {reasoning && (
                   <div className="mb-4">
-                    <div className="flex items-center gap-2 text-xs bg-primary/20 text-primary px-3 py-1.5 rounded-full mb-3 w-fit font-medium">
-                      <Image
-                        src={assets.deepthink_icon}
-                        className="h-3 w-3"
-                        alt="reasoning"
-                      />
-                      <span className="font-semibold tracking-wide">Deepdive</span>
-                    </div>
-                    <div className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-4 mb-4">
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                        <span className="text-sm font-medium text-gray-300">Reasoning Process</span>
+                    {/* DeepSeek-style collapsible reasoning */}
+                    <div 
+                      className="flex items-center gap-2 text-sm text-gray-400 cursor-pointer reasoning-toggle mb-3"
+                      onClick={() => setIsReasoningExpanded(!isReasoningExpanded)}
+                    >
+                      <div className="w-4 h-4 flex items-center justify-center">
+                        <div className="reasoning-dot"></div>
                       </div>
-                      <div className="text-sm text-gray-400 leading-relaxed whitespace-pre-wrap">
-                        {reasoning}
-                      </div>
+                      <span>Thought for 5 seconds</span>
+                      <svg 
+                        className={`w-4 h-4 transition-transform duration-200 ${isReasoningExpanded ? 'rotate-180' : ''}`}
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
                     </div>
+                    
+                    {/* Expandable reasoning content */}
+                    {isReasoningExpanded && (
+                      <div className="reasoning-content pl-4 py-2 mb-4 text-sm text-gray-400 leading-relaxed">
+                        <div className="whitespace-pre-wrap">
+                          {reasoning}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
                 
