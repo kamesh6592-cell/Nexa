@@ -89,7 +89,6 @@ const Message = ({ role, content, reasoning = false, searchData = null }) => {
                   alt="logo"
                 />
               </div>
-              </div>
               <div className="w-full min-w-0">
                 {reasoning && (
                   <div className="flex items-center gap-2 text-xs bg-primary/20 text-primary px-3 py-1.5 rounded-full mb-3 w-fit font-medium">
