@@ -13,12 +13,32 @@ cp .env.example .env.local
 2. Create a new project
 3. Go to Settings > API
 4. Copy your project URL and anon key
-5. Update `.env.local`:
+5. Go to Authentication > Settings
+6. Set **Site URL** to: `https://nexa-lemon-one.vercel.app`
+7. Add **Redirect URLs**:
+   ```
+   https://nexa-lemon-one.vercel.app/auth/callback
+   https://nexa-lemon-one.vercel.app/
+   http://localhost:3000/auth/callback
+   http://localhost:3000/
+   ```
+8. Update `.env.local`:
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
 ```
+
+#### OAuth Providers (Optional)
+If you want to enable Google/GitHub login:
+
+**Google OAuth:**
+- In Google Cloud Console, set redirect URI: `https://nexa-lemon-one.vercel.app/auth/callback`
+- In Supabase Auth > Providers > Google, enable and add your Google credentials
+
+**GitHub OAuth:**
+- In GitHub App settings, set callback URL: `https://nexa-lemon-one.vercel.app/auth/callback`
+- In Supabase Auth > Providers > GitHub, enable and add your GitHub credentials
 
 ### 3. Configure OpenAI (Required for AI Chat)
 
