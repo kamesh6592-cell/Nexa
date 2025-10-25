@@ -90,7 +90,7 @@ pre {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding: 16px;
     padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    z-index: 50;
+    z-index: 40;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
   }
 }
@@ -104,4 +104,13 @@ pre {
   .safe-area-top {
     padding-top: max(16px, env(safe-area-inset-top));
   }
+}
+
+/* Modal and overlay z-index management */
+.auth-modal-backdrop {
+  z-index: 9999 !important;
+}
+
+.auth-modal-content {
+  z-index: 10000 !important;
 }

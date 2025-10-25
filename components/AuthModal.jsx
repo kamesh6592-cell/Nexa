@@ -10,10 +10,15 @@ const AuthModal = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const { signIn, signUp, signInWithProvider } = useAuth()
+  const { signIn, signUp, signInWithProvider, isConfigured } = useAuth()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (!isConfigured) {
+      alert('Authentication is not configured. Please check your environment variables.')
+      return
+    }
+    
     setLoading(true)
     
     try {
@@ -33,6 +38,11 @@ const AuthModal = ({ isOpen, onClose }) => {
   }
 
   const handleProviderSignIn = async (provider) => {
+    if (!isConfigured) {
+      alert('Authentication is not configured. Please check your environment variables.')
+      return
+    }
+    
     setLoading(true)
     try {
       await signInWithProvider(provider)
@@ -46,8 +56,8 @@ const AuthModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#212327] rounded-2xl p-6 w-full max-w-md">
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center auth-modal-backdrop backdrop-blur-sm">
+      <div className="bg-[#212327] rounded-2xl p-6 w-full max-w-md shadow-2xl border border-gray-600/30 auth-modal-content mx-4">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-white">
             {isSignUp ? 'Create Account' : 'Welcome Back'}
@@ -59,6 +69,14 @@ const AuthModal = ({ isOpen, onClose }) => {
             ×
           </button>
         </div>
+
+        {!isConfigured && (
+          <div className="mb-4 p-3 bg-yellow-900/30 border border-yellow-500/50 rounded-lg">
+            <p className="text-yellow-200 text-sm">
+              ⚠️ Authentication is not configured. Please add your Supabase credentials to .env.local
+            </p>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
