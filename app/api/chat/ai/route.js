@@ -8,14 +8,22 @@ import connectDB from "@/config/db";
 import Chat from "@/models/Chat";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
-// Initialize OpenAI client with NEXA API key and base URL
+// Initialize OpenRouter client
 const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
-  apiKey: process.env.NEXA_API_KEY || "placeholder-key",
+  apiKey: process.env.OPENROUTER_API_KEY,
 });
 
 export async function POST(req) {
   try {
+    // Check if OpenRouter API key is configured
+    if (!process.env.OPENROUTER_API_KEY) {
+      return NextResponse.json({
+        success: false,
+        message: "OpenRouter API key not configured. Please add OPENROUTER_API_KEY to your environment variables.",
+      });
+    }
+
     // Check if Supabase is configured
     if (!isSupabaseConfigured()) {
       return NextResponse.json({

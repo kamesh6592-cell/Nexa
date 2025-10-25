@@ -54,14 +54,22 @@ If you want to enable Google/GitHub login:
 
 **Important:** Replace `YOUR-SUPABASE-PROJECT` with your actual Supabase project reference from your project URL.
 
-### 3. Configure OpenAI (Required for AI Chat)
+### 3. Configure OpenRouter (Required for AI Chat)
 
-1. Get your OpenAI API key from [OpenAI Platform](https://platform.openai.com)
-2. Update `.env.local`:
+1. Go to [OpenRouter](https://openrouter.ai)
+2. Create an account and get your API key
+3. Update `.env.local`:
 
 ```bash
-OPENAI_API_KEY=sk-your-openai-key-here
+OPENROUTER_API_KEY=sk-or-your-openrouter-key-here
 ```
+
+**OpenRouter provides access to multiple AI models including:**
+- DeepSeek R1 (free)
+- GPT-4
+- Claude
+- Llama models
+- And many more!
 
 ### 4. Optional: MongoDB (For Chat History)
 
@@ -107,6 +115,11 @@ If you see this error, you need to add your Supabase callback URL to Google Clou
    https://YOUR-SUPABASE-PROJECT.supabase.co/auth/v1/callback
    ```
 4. Replace `YOUR-SUPABASE-PROJECT` with your actual Supabase project reference
+
+### "No authorization token provided" message
+1. Make sure you've added your OpenRouter API key to `.env.local`
+2. Restart your development server: `npm run dev`
+3. Check that environment variables are set in Vercel for production
 
 ### "Auth not configured" message
 1. Make sure you've added your Supabase credentials to `.env.local`
