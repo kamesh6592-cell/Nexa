@@ -16,7 +16,7 @@ const Message = ({ role, content, reasoning = false, searchData = null }) => {
     toast.success("Message copied to clipboard");
   };
   return (
-    <div className="flex flex-col items-center w-full max-w-4xl">
+    <div className="flex flex-col items-center w-full max-w-4xl message-container prevent-layout-shift">
       <div
         className={`flex flex-col w-full mb-8 ${
           role === "user" && "items-end"
@@ -104,7 +104,7 @@ const Message = ({ role, content, reasoning = false, searchData = null }) => {
                 
                 {/* Search Results Section */}
                 {searchData && (
-                  <div className="mb-4">
+                  <div className="mb-4 search-results-container optimized-animation">
                     <SearchSection 
                       searchData={searchData} 
                       isLoading={false}

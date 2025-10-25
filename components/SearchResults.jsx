@@ -1,6 +1,36 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { Skeleton } from './ui/skeleton'
+
+/**
+ * Enhanced search skeleton for loading states
+ */
+export function SearchSkeleton() {
+  return (
+    <div className="flex flex-col gap-2 pb-4 pt-2 search-results-container">
+      <div className="flex flex-wrap gap-2 pb-0.5">
+        {[...Array(4)].map((_, index) => (
+          <div
+            key={index}
+            className="w-[calc(50%-0.5rem)] md:w-[calc(25%-0.5rem)]"
+          >
+            <Skeleton className="h-20 w-full search-skeleton" />
+          </div>
+        ))}
+      </div>
+      <div className="space-y-2">
+        {[...Array(3)].map((_, index) => (
+          <div key={index} className="space-y-2">
+            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-2/3" />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 /**
  * Component to display search results in a grid or list format
@@ -31,14 +61,14 @@ export function SearchResults({ results = [], displayMode = 'grid' }) {
   // List Mode Rendering
   if (displayMode === 'list') {
     return (
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 search-results-container">
         {results.map((result, index) => (
           <Link
             href={result.url}
             key={index}
             target="_blank"
             rel="noopener noreferrer"
-            className="block p-3 rounded-lg border border-white/10 hover:border-white/20 transition-colors bg-white/5 hover:bg-white/10"
+            className="group block p-3 rounded-lg border border-white/10 hover:border-white/20 transition-all duration-200 bg-white/5 hover:bg-white/10 optimized-animation"
           >
             <div className="flex items-start gap-3">
               <div className="flex-shrink-0 w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center text-xs font-medium text-white">
@@ -66,14 +96,14 @@ export function SearchResults({ results = [], displayMode = 'grid' }) {
   const displayedResults = results.slice(0, 6) // Show max 6 in grid
   
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 search-results-container">
       {displayedResults.map((result, index) => (
         <Link
           href={result.url}
           key={index}
           target="_blank"
           rel="noopener noreferrer"
-          className="block p-4 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-200 bg-white/5 hover:bg-white/10 hover:scale-[1.02]"
+          className="block p-4 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-200 bg-white/5 hover:bg-white/10 hover:scale-[1.02] optimized-animation"
         >
           <div className="flex items-start gap-3 h-full">
             <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-primary/20 to-primary/40 rounded-lg flex items-center justify-center text-sm font-bold text-white">

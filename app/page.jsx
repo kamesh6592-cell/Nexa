@@ -39,7 +39,7 @@ export default function Home() {
       <div className="flex h-screen">
         <Sidebar expand={expand} setExpand={setExpand} />
 
-        <div className={`flex-1 flex flex-col items-center justify-center px-4 pb-8 relative transition-colors duration-200 ${
+        <div className={`flex-1 flex flex-col items-center justify-center px-4 pb-8 relative transition-colors duration-200 chat-container ${
           theme === 'dark' 
             ? 'bg-[#292a2d] text-white' 
             : 'bg-[#f9fafb] text-gray-900'
@@ -82,7 +82,7 @@ export default function Home() {
             </>
           ) : (
             <div
-              className="relative flex flex-col items-center justify-start w-full mt-20 max-h-screen overflow-y-auto"
+              className="relative flex flex-col items-center justify-start w-full mt-20 max-h-screen overflow-y-auto scroll-smooth"
               ref={containerRef}
             >
               <p className={`fixed top-8 border border-transparent hover:border-gray-500/50 py-1 px-2 rounded-lg font-semibold mb-6 ${
