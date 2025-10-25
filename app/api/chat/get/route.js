@@ -1,10 +1,18 @@
 import connectDB from "@/config/db";
 import Chat from "@/models/Chat";
-import { supabase } from "@/lib/supabase";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
   try {
+    // Check if Supabase is configured
+    if (!isSupabaseConfigured()) {
+      return NextResponse.json({
+        success: false,
+        message: "Authentication not configured. Please set up Supabase environment variables.",
+      });
+    }
+
     // Get authorization header
     const authHeader = req.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');

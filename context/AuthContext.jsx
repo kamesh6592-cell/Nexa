@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import toast from 'react-hot-toast'
 
 const AuthContext = createContext({})
@@ -19,6 +19,12 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!isSupabaseConfigured()) {
+      console.warn('Supabase not configured - authentication disabled')
+      setLoading(false)
+      return
+    }
+
     // Get initial session
     const getInitialSession = async () => {
       try {
@@ -52,6 +58,11 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   const signIn = async (email, password) => {
+    if (!isSupabaseConfigured()) {
+      toast.error('Authentication not configured')
+      return
+    }
+
     try {
       setLoading(true)
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -69,6 +80,11 @@ export const AuthProvider = ({ children }) => {
   }
 
   const signUp = async (email, password) => {
+    if (!isSupabaseConfigured()) {
+      toast.error('Authentication not configured')
+      return
+    }
+
     try {
       setLoading(true)
       const { data, error } = await supabase.auth.signUp({
@@ -91,6 +107,11 @@ export const AuthProvider = ({ children }) => {
   }
 
   const signOut = async () => {
+    if (!isSupabaseConfigured()) {
+      toast.error('Authentication not configured')
+      return
+    }
+
     try {
       setLoading(true)
       const { error } = await supabase.auth.signOut()
@@ -104,6 +125,11 @@ export const AuthProvider = ({ children }) => {
   }
 
   const signInWithProvider = async (provider) => {
+    if (!isSupabaseConfigured()) {
+      toast.error('Authentication not configured')
+      return
+    }
+
     try {
       setLoading(true)
       const { data, error } = await supabase.auth.signInWithOAuth({
@@ -129,6 +155,7 @@ export const AuthProvider = ({ children }) => {
     signUp,
     signOut,
     signInWithProvider,
+    isConfigured: isSupabaseConfigured(),
   }
 
   return (

@@ -97,6 +97,24 @@ The app uses Supabase Auth with:
 
 The easiest way to deploy your NEXA app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
+### Quick Deploy Steps:
+
+1. **Push to GitHub**: Make sure your code is pushed to GitHub
+2. **Import to Vercel**: Connect your GitHub repository to Vercel
+3. **Set Environment Variables** in Vercel Dashboard:
+   ```
+   NEXA_API_KEY=your_nexa_api_key
+   MONGODB_URI=your_mongodb_connection_string
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+4. **Deploy**: Vercel will automatically build and deploy your app
+
+### Important Notes:
+- ⚠️ **Environment Variables Required**: The app will build but authentication won't work without Supabase credentials
+- 🔧 **MongoDB Required**: Set up MongoDB Atlas for chat persistence
+- 🌐 **Domain Setup**: Update Supabase redirect URLs with your production domain
+
 Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
 ## Contributing
