@@ -5,12 +5,15 @@ This is a Next.js-based AI chat application powered by NEXA AI, built with moder
 ## Features
 
 - 🤖 AI-powered conversations using NEXA AI
-- 🔐 Secure authentication with Supabase Auth
+- � **Real-time web search** integration with Tavily API
+- �🔐 Secure authentication with Supabase Auth
 - 💾 Chat history persistence with MongoDB
 - 📱 Responsive design for all devices
 - 🎨 Modern UI with Tailwind CSS
 - 🔒 Social login support (Google, GitHub)
 - 📧 Email/password authentication
+- 🌐 **Smart search results** with source links and images
+- 🧠 **Enhanced AI responses** with current web information
 
 ## Getting Started
 
@@ -58,15 +61,41 @@ NEXA_API_KEY=your_nexa_api_key
 MONGODB_URI=your_mongodb_connection_string
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+TAVILY_API_KEY=your_tavily_api_key_for_web_search
+OPENROUTER_API_KEY=your_openrouter_api_key
+GEMINI_API_KEY=your_gemini_api_key
 ```
 
 ## Tech Stack
 
 - **Frontend**: Next.js 15, React 19, Tailwind CSS
-- **AI**: NEXA AI via OpenRouter
+- **AI**: NEXA AI via OpenRouter, Google Gemini
+- **Search**: Tavily API for real-time web search
 - **Authentication**: Supabase Auth
 - **Database**: MongoDB with Mongoose
 - **Deployment**: Vercel-ready
+
+## Web Search Integration
+
+The application includes intelligent web search capabilities powered by Tavily API:
+
+### Features:
+- **Automatic Search Detection**: AI automatically determines when web search would be helpful
+- **Real-time Results**: Get current information on topics like news, prices, weather, etc.
+- **Source Citations**: All search results include source links and thumbnails
+- **Smart Formatting**: Search results are seamlessly integrated into AI responses
+
+### Search Triggers:
+The AI will automatically perform web searches for queries containing:
+- Current events and news ("latest", "recent", "breaking")
+- Price comparisons and reviews ("price of", "best", "compare")
+- How-to guides and tutorials ("how to", "tutorial", "guide")
+- Real-time data ("weather", "stock price", "current")
+
+### Setup:
+1. Get a Tavily API key from [Tavily](https://tavily.com)
+2. Add `TAVILY_API_KEY=your_key` to your environment variables
+3. The search functionality will automatically activate for relevant queries
 
 ## Learn More
 
@@ -107,6 +136,9 @@ The easiest way to deploy your NEXA app is to use the [Vercel Platform](https://
    MONGODB_URI=your_mongodb_connection_string
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   TAVILY_API_KEY=your_tavily_api_key_for_web_search
+   OPENROUTER_API_KEY=your_openrouter_api_key
+   GEMINI_API_KEY=your_gemini_api_key
    ```
 4. **Deploy**: Vercel will automatically build and deploy your app
 
