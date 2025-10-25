@@ -16,6 +16,12 @@ const inter = Inter({
 export const metadata = {
   title: "NEXA",
   description: "AI-Powered Chat Application",
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({ children }) {

@@ -16,9 +16,9 @@ const Message = ({ role, content, reasoning = false, searchData = null }) => {
     toast.success("Message copied to clipboard");
   };
   return (
-    <div className="flex flex-col items-center w-full max-w-4xl message-container prevent-layout-shift">
+    <div className="flex flex-col items-center w-full max-w-4xl message-container prevent-layout-shift stable-transform">
       <div
-        className={`flex flex-col w-full mb-8 ${
+        className={`flex flex-col w-full mb-8 component-transition ${
           role === "user" && "items-end"
         }`}
       >
@@ -112,7 +112,7 @@ const Message = ({ role, content, reasoning = false, searchData = null }) => {
                   </div>
                 )}
                 
-                <div className="prose prose-sm max-w-none text-white/90 leading-relaxed">
+                <div className="prose prose-sm max-w-none text-white/90 leading-relaxed typing-effect stable-transform">
                   <Markdown
                     components={{
                       p: ({ children }) => (

@@ -222,39 +222,57 @@ pre {
     0 16px 48px rgba(0, 0, 0, 0.4);
 }
 
-/* Smooth Rendering and Anti-shake */
+/* Ultra-Smooth Rendering and Anti-shake */
+* {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .chat-container {
-  will-change: transform;
-  transform: translateZ(0);
+  will-change: auto;
+  transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   perspective: 1000px;
+  contain: layout style paint;
 }
 
 .message-container {
-  transform: translateZ(0);
-  will-change: transform;
-  transition: all 0.2s ease-out;
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
+  transition: opacity 0.15s ease-out;
+  contain: layout style;
 }
 
 .search-results-container {
   opacity: 0;
-  transform: translateY(10px);
-  animation: slideInUp 0.3s ease-out forwards;
+  transform: translate3d(0, 5px, 0);
+  animation: slideInUp 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 @keyframes slideInUp {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translate3d(0, 5px, 0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
 .search-skeleton {
-  animation: shimmer 1.5s ease-in-out infinite;
+  animation: shimmer 1.2s ease-in-out infinite;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  background-size: 200px 100%;
 }
 
 @keyframes shimmer {
@@ -266,20 +284,42 @@ pre {
   }
 }
 
-/* Improved scrolling */
+/* Perfect scrolling */
 .scroll-smooth {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Prevent layout shift */
+/* Complete layout shift prevention */
 .prevent-layout-shift {
-  contain: layout style paint;
+  contain: layout style paint size;
+  content-visibility: auto;
 }
 
-/* Optimized animations */
+/* GPU-accelerated animations */
 .optimized-animation {
-  transform: translateZ(0);
-  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
   animation-fill-mode: both;
+}
+
+/* Message typing effect optimization */
+.typing-effect {
+  white-space: pre-wrap;
+  word-break: break-word;
+  will-change: auto;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Ultra smooth component transitions */
+.component-transition {
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translate3d(0, 0, 0);
+}
+
+/* Prevent any unwanted transforms */
+.stable-transform {
+  transform: translate3d(0, 0, 0) !important;
+  will-change: auto !important;
 }
