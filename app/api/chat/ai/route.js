@@ -76,10 +76,10 @@ export async function POST(req) {
 
     data.messages.push(userPrompt);
 
-    // Call the NEXA API to get a chat completion
+    // Call the OpenRouter API to get a chat completion
     const completion = await openai.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "tngtech/deepseek-r1t-chimera:free",
+      model: "openai/gpt-4o-mini",
       store: true,
     });
 

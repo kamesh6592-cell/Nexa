@@ -4,8 +4,29 @@
   --color-primary: #007c91;
 }
 
+/* Theme variables */
+.dark {
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #212327;
+  --bg-tertiary: #2A2B32;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-tertiary: rgba(255, 255, 255, 0.4);
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+.light {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --text-primary: #000000;
+  --text-secondary: rgba(0, 0, 0, 0.6);
+  --text-tertiary: rgba(0, 0, 0, 0.4);
+  --border-color: rgba(0, 0, 0, 0.1);
+}
+
 html {
-  @apply scroll-smooth;
+  scroll-behavior: smooth;
 }
 
 /* hide the scroll bar from the web page */

@@ -3,6 +3,7 @@ import "./globals.css";
 import "./prism.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { AppContextProvider } from "@/context/AppContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
@@ -19,17 +20,19 @@ export default function RootLayout({ children }) {
   return (
     <AuthProvider>
       <AppContextProvider>
-        <html lang="en">
-          <body className={`${inter.className} antialiased`}>
-            <Toaster
-              toastOptions={{
-                success: { style: { background: "black", color: "white" } },
-                error: { style: { background: "black", color: "white" } },
-              }}
-            />
-            {children}
-          </body>
-        </html>
+        <ThemeProvider>
+          <html lang="en">
+            <body className={`${inter.className} antialiased`}>
+              <Toaster
+                toastOptions={{
+                  success: { style: { background: "black", color: "white" } },
+                  error: { style: { background: "black", color: "white" } },
+                }}
+              />
+              {children}
+            </body>
+          </html>
+        </ThemeProvider>
       </AppContextProvider>
     </AuthProvider>
   );

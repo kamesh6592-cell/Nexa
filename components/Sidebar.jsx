@@ -1,19 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { assets } from "@/assets/assets";
 import { useAuth } from "@/context/AuthContext";
 import { useAppContext } from "@/context/AppContext";
+import { useTheme } from "@/context/ThemeContext";
 import ChatLabel from "./ChatLabel";
 import AuthModal from "./AuthModal";
+import SettingsModal from "./SettingsModal";
 
 const Sidebar = ({ expand, setExpand }) => {
   const { user, signOut } = useAuth();
   const { chats, createNewChat } = useAppContext();
+  const { theme } = useTheme();
   const [openMenu, setOpenMenu] = useState({ id: 0, open: false });
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const profileMenuRef = useRef(null);
+
+  // Close profile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+        setShowProfileMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   return (
     <div
-      className={`flex flex-col justify-between bg-[#212327] pt-4 md:pt-7 transition-all z-50 ${
+      className={`flex flex-col justify-between pt-4 md:pt-7 transition-all z-50 ${
+        theme === 'dark' ? 'bg-[#212327]' : 'bg-white border-r border-gray-200'
+      } ${
         expand 
           ? "fixed inset-0 md:relative md:inset-auto p-4 w-full md:w-64" 
           : "md:w-20 w-0 max-md:overflow-hidden"
@@ -135,36 +157,74 @@ const Sidebar = ({ expand, setExpand }) => {
           )}
         </div>
 
-        <div
-          onClick={user ? null : () => setShowAuthModal(true)}
-          className={`flex items-center touch-manipulation ${
-            expand ? "hover:bg-white/10 rounded-lg" : "justify-center w-full"
-          } gap-3 text-white/60 text-sm p-2 mt-2 cursor-pointer`}
-        >
-          {user ? (
-            <div className="min-h-[44px] min-w-[44px] flex items-center justify-center">
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-semibold">
-                {user.email?.charAt(0).toUpperCase()}
+        <div className="relative" ref={profileMenuRef}>
+          <div
+            onClick={user ? () => setShowProfileMenu(!showProfileMenu) : () => setShowAuthModal(true)}
+            className={`flex items-center touch-manipulation ${
+              expand ? "hover:bg-white/10 rounded-lg" : "justify-center w-full"
+            } gap-3 text-white/60 text-sm p-2 mt-2 cursor-pointer`}
+          >
+            {user ? (
+              <div className="min-h-[44px] min-w-[44px] flex items-center justify-center">
+                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-semibold">
+                  {user.email?.charAt(0).toUpperCase()}
+                </div>
               </div>
-            </div>
-          ) : (
-            <Image src={assets.profile_icon} className="w-7" alt="profile" />
-          )}
+            ) : (
+              <Image src={assets.profile_icon} className="w-7" alt="profile" />
+            )}
 
-          {expand && (
-            <div className="flex items-center justify-between w-full">
-              <span>{user ? user.email : "Sign In"}</span>
-              {user && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    signOut();
-                  }}
-                  className="text-xs text-white/40 hover:text-white/60"
-                >
-                  Sign Out
-                </button>
-              )}
+            {expand && (
+              <div className="flex items-center justify-between w-full">
+                <span>{user ? user.email : "Sign In"}</span>
+                {user && (
+                  <svg
+                    className={`w-4 h-4 transition-transform ${
+                      showProfileMenu ? 'rotate-180' : ''
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Profile Menu Dropdown */}
+          {user && showProfileMenu && expand && (
+            <div className="absolute bottom-full left-0 right-0 mb-2 bg-[#2A2B32] rounded-lg shadow-lg border border-white/10 py-2">
+              <button
+                onClick={() => {
+                  setShowSettingsModal(true);
+                  setShowProfileMenu(false);
+                }}
+                className="w-full px-4 py-2 text-left text-white/80 hover:bg-white/10 flex items-center gap-3"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Settings
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  signOut();
+                  setShowProfileMenu(false);
+                }}
+                className="w-full px-4 py-2 text-left text-red-400 hover:bg-white/10 flex items-center gap-3"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Sign Out
+              </button>
             </div>
           )}
         </div>
@@ -173,6 +233,11 @@ const Sidebar = ({ expand, setExpand }) => {
       <AuthModal 
         isOpen={showAuthModal} 
         onClose={() => setShowAuthModal(false)} 
+      />
+
+      <SettingsModal
+        isOpen={showSettingsModal}
+        onClose={() => setShowSettingsModal(false)}
       />
     </div>
   );
