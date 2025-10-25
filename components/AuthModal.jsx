@@ -70,14 +70,6 @@ const AuthModal = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {!isConfigured && (
-          <div className="mb-4 p-3 bg-yellow-900/30 border border-yellow-500/50 rounded-lg">
-            <p className="text-yellow-200 text-sm">
-              ⚠️ Authentication is not configured. Please add your Supabase credentials to .env.local
-            </p>
-          </div>
-        )}
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-white/80 mb-1">

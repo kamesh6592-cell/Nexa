@@ -8,18 +8,6 @@ html {
   @apply scroll-smooth;
 }
 
-/* Mobile-first responsive design */
-* {
-  box-sizing: border-box;
-}
-
-body {
-  overflow-x: hidden;
-  -webkit-text-size-adjust: 100%;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 /* hide the scroll bar from the web page */
 ::-webkit-scrollbar {
   display: none;
