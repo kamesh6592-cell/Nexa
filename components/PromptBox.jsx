@@ -4,11 +4,13 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { assets } from "@/assets/assets";
 import { useAppContext } from "@/context/AppContext";
+import { useModel } from "@/context/ModelContext";
 import toast from "react-hot-toast";
 import axios from "axios";
 
 const PromptBox = ({ isLoading, setIsLoading }) => {
   const [prompt, setPrompt] = useState("");
+  const { selectedModel } = useModel();
   const { user, chats, setChats, selectedChat, setSelectedChat } =
     useAppContext();
 
@@ -58,6 +60,7 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
       const { data } = await axios.post("/api/chat/ai", {
         chatId: selectedChat._id,
         prompt,
+        model: selectedModel,
       });
 
       if (data.success) {

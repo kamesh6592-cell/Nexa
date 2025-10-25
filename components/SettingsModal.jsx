@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useTheme } from '@/context/ThemeContext'
+import { useModel } from '@/context/ModelContext'
 import { useAuth } from '@/context/AuthContext'
 import Image from 'next/image'
 import { assets } from '@/assets/assets'
@@ -9,6 +10,7 @@ import toast from 'react-hot-toast'
 
 const SettingsModal = ({ isOpen, onClose }) => {
   const { theme, toggleTheme, isDark } = useTheme()
+  const { selectedModel, selectModel, models, getSelectedModel } = useModel()
   const { user, signOut } = useAuth()
   const [activeTab, setActiveTab] = useState('general')
 
@@ -32,13 +34,25 @@ const SettingsModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center auth-modal-backdrop backdrop-blur-sm z-[200]">
-      <div className="bg-[#212327] rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden shadow-2xl border border-gray-600/30 auth-modal-content mx-4">
+      <div className={`rounded-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden shadow-2xl border auth-modal-content mx-4 ${
+        theme === 'dark' 
+          ? 'bg-[#212327] border-gray-600/30' 
+          : 'bg-white border-gray-200'
+      }`}>
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-600/30">
-          <h2 className="text-xl font-semibold text-white">Settings</h2>
+        <div className={`flex items-center justify-between p-6 border-b ${
+          theme === 'dark' ? 'border-gray-600/30' : 'border-gray-200'
+        }`}>
+          <h2 className={`text-xl font-semibold ${
+            theme === 'dark' ? 'text-white' : 'text-gray-900'
+          }`}>Settings</h2>
           <button
             onClick={onClose}
-            className="text-white/60 hover:text-white text-2xl transition-colors"
+            className={`text-2xl transition-colors ${
+              theme === 'dark' 
+                ? 'text-white/60 hover:text-white' 
+                : 'text-gray-400 hover:text-gray-600'
+            }`}
           >
             ×
           </button>
@@ -46,7 +60,9 @@ const SettingsModal = ({ isOpen, onClose }) => {
 
         <div className="flex h-[500px]">
           {/* Sidebar */}
-          <div className="w-1/3 border-r border-gray-600/30 p-4">
+          <div className={`w-1/3 border-r p-4 ${
+            theme === 'dark' ? 'border-gray-600/30' : 'border-gray-200'
+          }`}>
             <nav className="space-y-2">
               {tabs.map((tab) => (
                 <button
@@ -55,7 +71,11 @@ const SettingsModal = ({ isOpen, onClose }) => {
                   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors ${
                     activeTab === tab.id
                       ? 'bg-primary/20 text-primary border border-primary/30'
-                      : 'text-white/70 hover:bg-white/10 hover:text-white'
+                      : `${
+                          theme === 'dark' 
+                            ? 'text-white/70 hover:bg-white/10 hover:text-white' 
+                            : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                        }`
                   }`}
                 >
                   <span className="text-lg">{tab.icon}</span>
@@ -70,9 +90,33 @@ const SettingsModal = ({ isOpen, onClose }) => {
             {activeTab === 'general' && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-medium text-white mb-4">General Settings</h3>
+                  <h3 className={`text-lg font-medium mb-4 ${
+                    theme === 'dark' ? 'text-white' : 'text-gray-900'
+                  }`}>General Settings</h3>
                   
                   <div className="space-y-4">
+                    {/* AI Model Selection */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <label className="text-white font-medium">AI Model</label>
+                        <p className="text-sm text-white/60">Choose your preferred AI model for conversations</p>
+                      </div>
+                      <select 
+                        value={selectedModel}
+                        onChange={(e) => {
+                          selectModel(e.target.value)
+                          toast.success(`Switched to ${models.find(m => m.id === e.target.value)?.name}`)
+                        }}
+                        className="bg-[#404045] text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none focus:border-primary min-w-[200px]"
+                      >
+                        {models.map((model) => (
+                          <option key={model.id} value={model.id}>
+                            {model.name} ({model.provider})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
                     <div className="flex items-center justify-between">
                       <div>
                         <label className="text-white font-medium">Language</label>

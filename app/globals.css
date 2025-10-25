@@ -13,16 +13,24 @@
   --text-secondary: rgba(255, 255, 255, 0.6);
   --text-tertiary: rgba(255, 255, 255, 0.4);
   --border-color: rgba(255, 255, 255, 0.1);
+  --sidebar-bg: #212327;
+  --main-bg: #292a2d;
+  --card-bg: #2A2B32;
+  --hover-bg: rgba(255, 255, 255, 0.1);
 }
 
 .light {
   --bg-primary: #ffffff;
   --bg-secondary: #f8f9fa;
   --bg-tertiary: #e9ecef;
-  --text-primary: #000000;
-  --text-secondary: rgba(0, 0, 0, 0.6);
-  --text-tertiary: rgba(0, 0, 0, 0.4);
-  --border-color: rgba(0, 0, 0, 0.1);
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --border-color: #e5e7eb;
+  --sidebar-bg: #ffffff;
+  --main-bg: #f9fafb;
+  --card-bg: #ffffff;
+  --hover-bg: #f3f4f6;
 }
 
 html {

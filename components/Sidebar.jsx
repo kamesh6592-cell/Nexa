@@ -34,7 +34,9 @@ const Sidebar = ({ expand, setExpand }) => {
   return (
     <div
       className={`flex flex-col justify-between pt-4 md:pt-7 transition-all z-50 ${
-        theme === 'dark' ? 'bg-[#212327]' : 'bg-white border-r border-gray-200'
+        theme === 'dark' 
+          ? 'bg-[#212327]' 
+          : 'bg-white border-r border-gray-200 shadow-sm'
       } ${
         expand 
           ? "fixed inset-0 md:relative md:inset-auto p-4 w-full md:w-64" 
@@ -83,10 +85,12 @@ const Sidebar = ({ expand, setExpand }) => {
         
         <button
           onClick={createNewChat}
-          className={`mt-6 md:mt-8 flex items-center justify-center cursor-pointer touch-manipulation ${
+          className={`mt-6 md:mt-8 flex items-center justify-center cursor-pointer touch-manipulation transition-colors ${
             expand
               ? "bg-primary hover:opacity-90 rounded-2xl gap-2 p-2.5 w-full md:w-max"
-              : "group relative h-10 w-10 mx-auto hover:bg-gray-500/30 rounded-lg"
+              : `group relative h-10 w-10 mx-auto rounded-lg ${
+                  theme === 'dark' ? 'hover:bg-gray-500/30' : 'hover:bg-gray-100'
+                }`
           }`}
         >
           <Image
@@ -94,17 +98,25 @@ const Sidebar = ({ expand, setExpand }) => {
             src={expand ? assets.chat_icon : assets.chat_icon_dull}
             alt="chat icon"
           />
-          <div className="absolute w-max -top-12 -right-12 opacity-0 group-hover:opacity-100 transition bg-black text-white text-sm px-3 py-2 rounded-lg shadow-lg pointer-events-none">
+          <div className={`absolute w-max -top-12 -right-12 opacity-0 group-hover:opacity-100 transition text-sm px-3 py-2 rounded-lg shadow-lg pointer-events-none ${
+            theme === 'dark' 
+              ? 'bg-black text-white' 
+              : 'bg-gray-800 text-white'
+          }`}>
             New Chat
-            <div className="w-3 h-3 absolute bg-black rotate-45 left-4 -bottom-1.5"></div>
+            <div className={`w-3 h-3 absolute rotate-45 left-4 -bottom-1.5 ${
+              theme === 'dark' ? 'bg-black' : 'bg-gray-800'
+            }`}></div>
           </div>
-          {expand && <p className="text-white font-medium">New Chat</p>}
+          {expand && <p className={`font-medium ${
+            theme === 'dark' ? 'text-white' : 'text-white'
+          }`}>New Chat</p>}
         </button>
 
         <div
-          className={`mt-6 md:mt-8 text-white/25 text-sm ${
+          className={`mt-6 md:mt-8 text-sm ${
             expand ? "block" : "hidden"
-          }`}
+          } ${theme === 'dark' ? 'text-white/25' : 'text-gray-400'}`}
         >
           <p className="my-1">Recents</p>
           <div className="max-h-64 md:max-h-96 overflow-y-auto">
@@ -123,10 +135,16 @@ const Sidebar = ({ expand, setExpand }) => {
 
       <div className="pb-4 md:pb-0">
         <div
-          className={`flex items-center cursor-pointer group relative touch-manipulation ${
+          className={`flex items-center cursor-pointer group relative touch-manipulation transition-colors ${
             expand
-              ? "gap-1 text-white/80 text-sm p-2.5 border border-primary rounded-lg hover:bg-white/10 cursor-pointer"
-              : "h-10 w-10 mx-auto hover:bg-gray-500/30 rounded-lg"
+              ? `gap-1 text-sm p-2.5 border border-primary rounded-lg cursor-pointer ${
+                  theme === 'dark' 
+                    ? 'text-white/80 hover:bg-white/10' 
+                    : 'text-gray-700 hover:bg-gray-50'
+                }`
+              : `h-10 w-10 mx-auto rounded-lg ${
+                  theme === 'dark' ? 'hover:bg-gray-500/30' : 'hover:bg-gray-100'
+                }`
           }`}
         >
           <Image
@@ -139,19 +157,23 @@ const Sidebar = ({ expand, setExpand }) => {
               !expand && "-right-40"
             } opacity-0 group-hover:opacity-100 hidden group-hover:block transition`}
           >
-            <div className="relative w-max bg-black text-white text-sm p-3 rounded-lg shadow-lg">
+            <div className={`relative w-max text-sm p-3 rounded-lg shadow-lg ${
+              theme === 'dark' ? 'bg-black text-white' : 'bg-gray-800 text-white'
+            }`}>
               <Image src={assets.qrcode} className="w-44" alt="qrcode" />
               <p>Scan to get NEXA App</p>
               <div
-                className={`w-3 h-3 absolute bg-black rotate-45 ${
+                className={`w-3 h-3 absolute rotate-45 ${
                   expand ? "right-1/2" : "left-4"
-                } -bottom-1.5`}
+                } -bottom-1.5 ${
+                  theme === 'dark' ? 'bg-black' : 'bg-gray-800'
+                }`}
               ></div>
             </div>
           </div>
           {expand && (
             <>
-              <span>Get App</span>{" "}
+              <span className={theme === 'dark' ? 'text-white/80' : 'text-gray-700'}>Get App</span>
               <Image src={assets.new_icon} alt="new icon" />
             </>
           )}
@@ -160,9 +182,15 @@ const Sidebar = ({ expand, setExpand }) => {
         <div className="relative" ref={profileMenuRef}>
           <div
             onClick={user ? () => setShowProfileMenu(!showProfileMenu) : () => setShowAuthModal(true)}
-            className={`flex items-center touch-manipulation ${
-              expand ? "hover:bg-white/10 rounded-lg" : "justify-center w-full"
-            } gap-3 text-white/60 text-sm p-2 mt-2 cursor-pointer`}
+            className={`flex items-center touch-manipulation transition-colors ${
+              expand 
+                ? `rounded-lg ${
+                    theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-gray-100'
+                  }` 
+                : "justify-center w-full"
+            } gap-3 text-sm p-2 mt-2 cursor-pointer ${
+              theme === 'dark' ? 'text-white/60' : 'text-gray-600'
+            }`}
           >
             {user ? (
               <div className="min-h-[44px] min-w-[44px] flex items-center justify-center">
@@ -195,13 +223,21 @@ const Sidebar = ({ expand, setExpand }) => {
 
           {/* Profile Menu Dropdown */}
           {user && showProfileMenu && expand && (
-            <div className="absolute bottom-full left-0 right-0 mb-2 bg-[#2A2B32] rounded-lg shadow-lg border border-white/10 py-2">
+            <div className={`absolute bottom-full left-0 right-0 mb-2 rounded-lg shadow-lg border py-2 ${
+              theme === 'dark' 
+                ? 'bg-[#2A2B32] border-white/10' 
+                : 'bg-white border-gray-200'
+            }`}>
               <button
                 onClick={() => {
                   setShowSettingsModal(true);
                   setShowProfileMenu(false);
                 }}
-                className="w-full px-4 py-2 text-left text-white/80 hover:bg-white/10 flex items-center gap-3"
+                className={`w-full px-4 py-2 text-left flex items-center gap-3 transition-colors ${
+                  theme === 'dark' 
+                    ? 'text-white/80 hover:bg-white/10' 
+                    : 'text-gray-700 hover:bg-gray-50'
+                }`}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
@@ -217,7 +253,11 @@ const Sidebar = ({ expand, setExpand }) => {
                   signOut();
                   setShowProfileMenu(false);
                 }}
-                className="w-full px-4 py-2 text-left text-red-400 hover:bg-white/10 flex items-center gap-3"
+                className={`w-full px-4 py-2 text-left flex items-center gap-3 transition-colors ${
+                  theme === 'dark' 
+                    ? 'text-red-400 hover:bg-white/10' 
+                    : 'text-red-500 hover:bg-gray-50'
+                }`}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 

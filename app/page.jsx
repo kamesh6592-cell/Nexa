@@ -37,12 +37,14 @@ export default function Home() {
       <div className="flex h-screen">
         <Sidebar expand={expand} setExpand={setExpand} />
 
-        <div className={`flex-1 flex flex-col items-center justify-center px-4 pb-8 text-white relative ${
+        <div className={`flex-1 flex flex-col items-center justify-center px-4 pb-8 relative transition-colors duration-200 ${
           theme === 'dark' 
-            ? 'bg-[#292a2d]' 
-            : 'bg-gray-50 text-gray-900'
+            ? 'bg-[#292a2d] text-white' 
+            : 'bg-[#f9fafb] text-gray-900'
         }`}>
-          <div className="md:hidden absolute px-4 top-6 flex items-center justify-between w-full">
+          <div className={`md:hidden absolute px-4 top-6 flex items-center justify-between w-full ${
+            theme === 'light' ? 'filter invert' : ''
+          }`}>
             <Image
               alt="menu"
               onClick={() => (expand ? setExpand(false) : setExpand(true))}
@@ -64,11 +66,15 @@ export default function Home() {
                   className="h-20 w-20"
                   alt="logo"
                 />
-                <p className="text-2xl font-medium ml-[-1rem]">
+                <p className={`text-2xl font-medium ml-[-1rem] ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
                   Hello, I am NEXA
                 </p>
               </div>
-              <p className="text-sm ">How can I help you today?</p>
+              <p className={`text-sm ${
+                theme === 'dark' ? 'text-white/70' : 'text-gray-600'
+              }`}>How can I help you today?</p>
             </>
           ) : (
             <div

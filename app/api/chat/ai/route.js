@@ -53,8 +53,21 @@ export async function POST(req) {
       });
     }
 
-    // Extract chatId and prompt from the request body
-    const { chatId, prompt } = await req.json();
+    // Extract chatId, prompt, and model from the request body
+    const { chatId, prompt, model = "openai/gpt-4o-mini" } = await req.json();
+
+    // Validate model selection
+    const supportedModels = [
+      "openai/gpt-4o-mini",
+      "google/gemini-2.0-flash-exp"
+    ];
+
+    if (!supportedModels.includes(model)) {
+      return NextResponse.json({
+        success: false,
+        message: `Unsupported model. Supported models: ${supportedModels.join(", ")}`,
+      });
+    }
 
     // Find the chat document in the database based on userId and chatId
     await connectDB();
@@ -79,7 +92,7 @@ export async function POST(req) {
     // Call the OpenRouter API to get a chat completion
     const completion = await openai.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "openai/gpt-4o-mini",
+      model: model,
       store: true,
     });
 
