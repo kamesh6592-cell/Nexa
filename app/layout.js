@@ -5,6 +5,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { AppContextProvider } from "@/context/AppContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { ModelProvider } from "@/context/ModelContext";
+import { ReasoningProvider } from "@/context/ReasoningContext";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
@@ -22,19 +23,21 @@ export default function RootLayout({ children }) {
     <AuthProvider>
       <AppContextProvider>
         <ThemeProvider>
-          <ModelProvider>
-            <html lang="en">
-              <body className={`${inter.className} antialiased`}>
-                <Toaster
-                  toastOptions={{
-                    success: { style: { background: "black", color: "white" } },
-                    error: { style: { background: "black", color: "white" } },
-                  }}
-                />
-                {children}
-              </body>
-            </html>
-          </ModelProvider>
+          <ReasoningProvider>
+            <ModelProvider>
+              <html lang="en">
+                <body className={`${inter.className} antialiased`}>
+                  <Toaster
+                    toastOptions={{
+                      success: { style: { background: "black", color: "white" } },
+                      error: { style: { background: "black", color: "white" } },
+                    }}
+                  />
+                  {children}
+                </body>
+              </html>
+            </ModelProvider>
+          </ReasoningProvider>
         </ThemeProvider>
       </AppContextProvider>
     </AuthProvider>

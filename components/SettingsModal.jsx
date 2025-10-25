@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTheme } from '@/context/ThemeContext'
 import { useModel } from '@/context/ModelContext'
+import { useReasoning } from '@/context/ReasoningContext'
 import { useAuth } from '@/context/AuthContext'
 import Image from 'next/image'
 import { assets } from '@/assets/assets'
@@ -11,6 +12,7 @@ import toast from 'react-hot-toast'
 const SettingsModal = ({ isOpen, onClose }) => {
   const { theme, toggleTheme, isDark } = useTheme()
   const { selectedModel, selectModel, models, getSelectedModel } = useModel()
+  const { isReasoningEnabled, toggleReasoning } = useReasoning()
   const { user, signOut } = useAuth()
   const [activeTab, setActiveTab] = useState('general')
 
@@ -152,6 +154,34 @@ const SettingsModal = ({ isOpen, onClose }) => {
                           </div>
                         );
                       })()}
+                    </div>
+
+                    {/* Reasoning Toggle */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <label className={`font-medium ${
+                          theme === 'dark' ? 'text-white' : 'text-gray-900'
+                        }`}>DeepThink Reasoning</label>
+                        <p className={`text-sm ${
+                          theme === 'dark' ? 'text-white/60' : 'text-gray-600'
+                        }`}>Enable enhanced reasoning for better analysis</p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input 
+                          type="checkbox" 
+                          className="sr-only peer" 
+                          checked={isReasoningEnabled}
+                          onChange={() => {
+                            toggleReasoning()
+                            toast.success(
+                              isReasoningEnabled 
+                                ? 'DeepThink disabled' 
+                                : 'DeepThink enabled'
+                            )
+                          }}
+                        />
+                        <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                      </label>
                     </div>
 
                     <div className="flex items-center justify-between">

@@ -131,3 +131,48 @@ pre {
 .auth-modal-content {
   z-index: 10000 !important;
 }
+
+/* Reasoning toggle styles */
+.reasoning-toggle {
+  transition: all 0.3s ease;
+}
+
+.reasoning-toggle.active {
+  background: rgba(0, 124, 145, 0.1);
+  border-color: #007c91;
+  color: #007c91;
+}
+
+.reasoning-toggle:hover {
+  background: rgba(0, 124, 145, 0.05);
+}
+
+.reasoning-indicator {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* DeepThink icon animation */
+.deepthink-icon {
+  animation: think 3s ease-in-out infinite;
+}
+
+@keyframes think {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-5deg) scale(1.05);
+  }
+  75% {
+    transform: rotate(5deg) scale(1.05);
+  }
+}

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { assets } from "@/assets/assets";
 import { useAppContext } from "@/context/AppContext";
 import { useModel } from "@/context/ModelContext";
+import { useReasoning } from "@/context/ReasoningContext";
 import { supabase } from "@/lib/supabase";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -12,6 +13,7 @@ import axios from "axios";
 const PromptBox = ({ isLoading, setIsLoading }) => {
   const [prompt, setPrompt] = useState("");
   const { selectedModel } = useModel();
+  const { isReasoningEnabled, toggleReasoning } = useReasoning();
   const { user, chats, setChats, selectedChat, setSelectedChat } =
     useAppContext();
 
@@ -69,6 +71,7 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
         chatId: selectedChat._id,
         prompt,
         model: selectedModel,
+        reasoning: isReasoningEnabled,
       }, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -89,6 +92,7 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
           role: "assistant",
           content: "",
           timeStamp: Date.now(),
+          reasoning: data.data.reasoning || null,
         };
 
         setSelectedChat((prev) => {
@@ -145,14 +149,21 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
 
       <div className="flex items-center justify-between text-sm">
         <div className="flex items-center gap-2">
-          {/* <p className="flex items-center gap-2 text-xs border border-gray-300/40 px-2 py-1 rounded-full cursor-pointer hover:bg-gray-500/20 transition">
+          <p 
+            onClick={toggleReasoning}
+            className={`flex items-center gap-2 text-xs px-2 py-1 rounded-full cursor-pointer transition ${
+              isReasoningEnabled 
+                ? "border-primary bg-primary/10 text-primary" 
+                : "border border-gray-300/40 hover:bg-gray-500/20"
+            }`}
+          >
             <Image
               className="h-5"
               src={assets.deepthink_icon}
               alt="deepthink"
             />
             DeepThink (R1)
-          </p> */}
+          </p>
           {/* <p className="flex items-center gap-2 text-xs border border-gray-300/40 px-2 py-1 rounded-full cursor-pointer hover:bg-gray-500/20 transition">
             <Image className="h-5" src={assets.search_icon} alt="search" />
             Search

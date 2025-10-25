@@ -5,7 +5,7 @@ import Markdown from "react-markdown";
 import Prism from "prismjs";
 import toast from "react-hot-toast";
 
-const Message = ({ role, content }) => {
+const Message = ({ role, content, reasoning = false }) => {
   useEffect(() => {
     Prism.highlightAll();
   }, [content]);
@@ -82,8 +82,20 @@ const Message = ({ role, content }) => {
                 className="h-9 w-9 p-1 border border-white/15 rounded-full"
                 alt="logo"
               />
-              <div className="space-y-4 w-full overflow-scroll">
-                <Markdown>{content}</Markdown>
+              <div className="w-full">
+                {reasoning && (
+                  <div className="flex items-center gap-1 text-xs bg-primary/20 text-primary px-2 py-1 rounded-full mb-2 w-fit">
+                    <Image
+                      src={assets.deepthink_icon}
+                      className="h-3 w-3"
+                      alt="reasoning"
+                    />
+                    <span>DeepThink</span>
+                  </div>
+                )}
+                <div className="space-y-4 w-full overflow-scroll">
+                  <Markdown>{content}</Markdown>
+                </div>
               </div>
             </>
           )}

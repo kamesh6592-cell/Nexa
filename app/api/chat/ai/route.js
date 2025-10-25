@@ -52,8 +52,8 @@ export async function POST(req) {
       });
     }
 
-    // Extract chatId, prompt, and model from the request body
-    const { chatId, prompt, model = "openai/gpt-4o-mini" } = await req.json();
+    // Extract chatId, prompt, model, and reasoning from the request body
+    const { chatId, prompt, model = "openai/gpt-4o-mini", reasoning = false } = await req.json();
 
     // Define supported models and their API requirements
     const modelConfig = {
@@ -99,25 +99,48 @@ export async function POST(req) {
 
     let message;
 
+    // Enhance prompt with reasoning instructions if reasoning is enabled
+    let enhancedPrompt = prompt;
+    if (reasoning) {
+      enhancedPrompt = `Think step by step and show your reasoning process. Be thorough in your analysis and explain your thought process clearly.
+
+User query: ${prompt}
+
+Please provide:
+1. Your reasoning process (thinking step by step)
+2. Your final answer
+
+Format your response with clear sections for reasoning and conclusion.`;
+    }
+
     // Call appropriate API based on model configuration
     if (config.api === "openrouter") {
       // Use OpenRouter API
       const completion = await openai.chat.completions.create({
-        messages: [{ role: "user", content: prompt }],
+        messages: [{ role: "user", content: enhancedPrompt }],
         model: model,
         store: true,
+        ...(reasoning && { 
+          temperature: 0.7,
+          max_tokens: 2000 
+        })
       });
       message = completion.choices[0].message;
     } else if (config.api === "gemini") {
       // Use direct Gemini API
       const modelInstance = genAI.getGenerativeModel({ model: model });
-      const result = await modelInstance.generateContent(prompt);
+      const result = await modelInstance.generateContent(enhancedPrompt);
       const response = await result.response;
       
       message = {
         role: "assistant",
         content: response.text(),
       };
+    }
+
+    // Add reasoning flag to message if reasoning was enabled
+    if (reasoning) {
+      message.reasoning = true;
     }
 
     message.timestamp = Date.now();
