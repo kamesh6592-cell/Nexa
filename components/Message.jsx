@@ -85,9 +85,10 @@ const Message = ({ role, content, reasoning = false, searchData = null }) => {
               <div className="flex-shrink-0">
                 <Image
                   src={assets.logo_icon}
-                  className="h-10 w-10 p-1.5 border border-white/15 rounded-full shadow-sm"
+                  className="h-10 w-10 rounded-full object-cover logo-avatar transition-all duration-200"
                   alt="logo"
                 />
+              </div>
               </div>
               <div className="w-full min-w-0">
                 {reasoning && (

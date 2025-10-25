@@ -55,11 +55,13 @@ const Sidebar = ({ expand, setExpand }) => {
             expand ? "flex-row gap-6 md:gap-10" : "flex-col items-center gap-9"
           }`}
         >
-          <Image
-            className={expand ? "w-28 md:w-36" : "w-10"}
-            src={expand ? assets.logo_text : assets.logo_icon}
-            alt="logo text"
-          />
+          <div className="relative">
+            <Image
+              className={`${expand ? "w-28 md:w-36 rounded-xl" : "w-10 rounded-full object-cover logo-avatar transition-all duration-300"}`}
+              src={expand ? assets.logo_text : assets.logo_icon}
+              alt="logo text"
+            />
+          </div>
 
           <div
             onClick={() => (expand ? setExpand(false) : setExpand(true))}

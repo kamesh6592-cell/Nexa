@@ -176,3 +176,48 @@ pre {
     transform: rotate(5deg) scale(1.05);
   }
 }
+
+/* Enhanced Logo Styling */
+.logo-main {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo-main:hover {
+  transform: scale(1.05);
+}
+
+.logo-main::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, transparent, rgba(0, 124, 145, 0.3), transparent);
+  border-radius: 50%;
+  animation: logo-glow 2s ease-in-out infinite alternate;
+  z-index: -1;
+}
+
+@keyframes logo-glow {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+.logo-avatar {
+  box-shadow: 
+    0 0 0 1px rgba(0, 124, 145, 0.2),
+    0 4px 12px rgba(0, 124, 145, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.logo-avatar:hover {
+  box-shadow: 
+    0 0 0 2px rgba(0, 124, 145, 0.4),
+    0 8px 24px rgba(0, 124, 145, 0.25),
+    0 16px 48px rgba(0, 0, 0, 0.4);
+}

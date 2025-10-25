@@ -63,11 +63,13 @@ export default function Home() {
           {messages.length === 0 ? (
             <>
               <div className="flex items-center gap-3">
-                <Image
-                  src={assets.logo_icon}
-                  className="h-20 w-20"
-                  alt="logo"
-                />
+                <div className="logo-main">
+                  <Image
+                    src={assets.logo_icon}
+                    className="h-20 w-20 rounded-full object-cover logo-avatar"
+                    alt="logo"
+                  />
+                </div>
                 <p className={`text-2xl font-medium ml-[-1rem] ${
                   theme === 'dark' ? 'text-white' : 'text-gray-900'
                 }`}>
@@ -100,7 +102,7 @@ export default function Home() {
               {isLoading && (
                 <div className="flex gap-4 max-w-3xl w-full py-3">
                   <Image
-                    className="h-9 w-9 p-1 border border-white/15 rounded-full"
+                    className="h-9 w-9 rounded-full object-cover logo-avatar animate-pulse"
                     src={assets.logo_icon}
                     alt="Logo"
                   />
