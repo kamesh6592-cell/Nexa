@@ -16,9 +16,9 @@ const Message = ({ role, content, reasoning = false, searchData = null }) => {
     toast.success("Message copied to clipboard");
   };
   return (
-    <div className="flex flex-col items-center w-full max-w-4xl message-container prevent-layout-shift stable-transform">
+    <div className="flex flex-col items-center w-full max-w-4xl message-container">
       <div
-        className={`flex flex-col w-full mb-8 component-transition ${
+        className={`flex flex-col w-full mb-8 ${
           role === "user" && "items-end"
         }`}
       >
@@ -91,13 +91,24 @@ const Message = ({ role, content, reasoning = false, searchData = null }) => {
               </div>
               <div className="w-full min-w-0">
                 {reasoning && (
-                  <div className="flex items-center gap-2 text-xs bg-primary/20 text-primary px-3 py-1.5 rounded-full mb-3 w-fit font-medium">
-                    <Image
-                      src={assets.deepthink_icon}
-                      className="h-3 w-3"
-                      alt="reasoning"
-                    />
-                    <span className="font-semibold tracking-wide">DeepThink</span>
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 text-xs bg-primary/20 text-primary px-3 py-1.5 rounded-full mb-3 w-fit font-medium">
+                      <Image
+                        src={assets.deepthink_icon}
+                        className="h-3 w-3"
+                        alt="reasoning"
+                      />
+                      <span className="font-semibold tracking-wide">Deepdive</span>
+                    </div>
+                    <div className="bg-gray-800/50 border border-gray-700/50 rounded-lg p-4 mb-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                        <span className="text-sm font-medium text-gray-300">Reasoning Process</span>
+                      </div>
+                      <div className="text-sm text-gray-400 leading-relaxed whitespace-pre-wrap">
+                        {reasoning}
+                      </div>
+                    </div>
                   </div>
                 )}
                 
@@ -112,7 +123,7 @@ const Message = ({ role, content, reasoning = false, searchData = null }) => {
                   </div>
                 )}
                 
-                <div className="prose prose-sm max-w-none text-white/90 leading-relaxed typing-effect stable-transform">
+                <div className="prose prose-sm max-w-none text-white/90 leading-relaxed">
                   <Markdown
                     components={{
                       p: ({ children }) => (
@@ -160,11 +171,39 @@ const Message = ({ role, content, reasoning = false, searchData = null }) => {
                           <code className={className}>{children}</code>
                         );
                       },
-                      pre: ({ children }) => (
-                        <pre className="my-4 overflow-x-auto bg-black/40 border border-white/10 rounded-xl p-4 text-[14px] leading-relaxed">
-                          {children}
-                        </pre>
-                      ),
+                      pre: ({ children }) => {
+                        const codeElement = children?.props;
+                        const language = codeElement?.className?.replace('language-', '') || 'text';
+                        const code = codeElement?.children || '';
+                        
+                        const copyCode = () => {
+                          navigator.clipboard.writeText(code);
+                          toast.success("Code copied to clipboard");
+                        };
+
+                        return (
+                          <div className="my-4 overflow-hidden bg-black/40 border border-white/10 rounded-xl">
+                            <div className="flex items-center justify-between px-4 py-2 bg-gray-800/50 border-b border-white/10">
+                              <span className="inline-flex items-center gap-2">
+                                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                                <span className="text-xs font-medium text-gray-300 uppercase tracking-wide">
+                                  {language}
+                                </span>
+                              </span>
+                              <button
+                                onClick={copyCode}
+                                className="inline-flex items-center gap-1 px-2 py-1 text-xs text-gray-400 hover:text-white transition-colors rounded border border-gray-600 hover:border-gray-500"
+                              >
+                                <Image src={assets.copy_icon} className="w-3 h-3" alt="copy" />
+                                Copy
+                              </button>
+                            </div>
+                            <pre className="overflow-x-auto p-4 text-[14px] leading-relaxed">
+                              {children}
+                            </pre>
+                          </div>
+                        );
+                      },
                       blockquote: ({ children }) => (
                         <blockquote className="border-l-4 border-primary/60 pl-4 py-2 my-4 italic text-white/80 bg-primary/10 rounded-r-lg">
                           {children}
