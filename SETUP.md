@@ -33,12 +33,26 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
 If you want to enable Google/GitHub login:
 
 **Google OAuth:**
-- In Google Cloud Console, set redirect URI: `https://nexa-lemon-one.vercel.app/auth/callback`
-- In Supabase Auth > Providers > Google, enable and add your Google credentials
+1. In Google Cloud Console → APIs & Services → Credentials
+2. Create or edit your OAuth 2.0 Client ID
+3. In **Authorized redirect URIs**, add:
+   ```
+   https://YOUR-SUPABASE-PROJECT.supabase.co/auth/v1/callback
+   https://nexa-lemon-one.vercel.app/auth/callback
+   http://localhost:3000/auth/callback
+   ```
+4. In Supabase → Auth → Providers → Google: Enable and add your Google Client ID and Secret
 
 **GitHub OAuth:**
-- In GitHub App settings, set callback URL: `https://nexa-lemon-one.vercel.app/auth/callback`
-- In Supabase Auth > Providers > GitHub, enable and add your GitHub credentials
+1. In GitHub → Settings → Developer settings → OAuth Apps
+2. Create new OAuth App or edit existing
+3. Set **Authorization callback URL** to:
+   ```
+   https://YOUR-SUPABASE-PROJECT.supabase.co/auth/v1/callback
+   ```
+4. In Supabase → Auth → Providers → GitHub: Enable and add your GitHub Client ID and Secret
+
+**Important:** Replace `YOUR-SUPABASE-PROJECT` with your actual Supabase project reference from your project URL.
 
 ### 3. Configure OpenAI (Required for AI Chat)
 
@@ -80,3 +94,21 @@ The app is configured for Vercel deployment. Make sure to add all environment va
 - ✅ Dark Mode UI
 - ✅ Chat History (Optional with MongoDB)
 - ✅ PWA Support
+
+## Troubleshooting
+
+### Google OAuth Error: "redirect_uri_mismatch"
+If you see this error, you need to add your Supabase callback URL to Google Cloud Console:
+
+1. Go to Google Cloud Console → APIs & Services → Credentials
+2. Edit your OAuth 2.0 Client ID
+3. Add to Authorized redirect URIs:
+   ```
+   https://YOUR-SUPABASE-PROJECT.supabase.co/auth/v1/callback
+   ```
+4. Replace `YOUR-SUPABASE-PROJECT` with your actual Supabase project reference
+
+### "Auth not configured" message
+1. Make sure you've added your Supabase credentials to `.env.local`
+2. Restart your development server: `npm run dev`
+3. Check that environment variables are set in Vercel for production
