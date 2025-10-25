@@ -17,33 +17,36 @@ const Message = ({ role, content, reasoning = false, searchData = null }) => {
     navigator.clipboard.writeText(content);
     toast.success("Message copied to clipboard");
   };
+
+  // Ensure content exists before rendering
+  if (!content) {
+    return null;
+  }
+
   return (
     <div className="flex flex-col items-center w-full max-w-4xl message-container">
       {/* Reasoning Process - Separate from main message */}
       {reasoning && role === "assistant" && (
-        <div className="w-full max-w-3xl mb-4">
+        <div className="w-full max-w-3xl mb-2">
           <div 
-            className="flex items-center gap-2 text-sm text-gray-400 cursor-pointer reasoning-toggle hover:text-gray-300 transition-colors"
+            className="flex items-center gap-2 text-sm text-gray-500 cursor-pointer reasoning-toggle hover:text-gray-400 transition-colors py-1"
             onClick={() => setIsReasoningExpanded(!isReasoningExpanded)}
           >
-            <div className="w-4 h-4 flex items-center justify-center">
+            <div className="w-3 h-3 flex items-center justify-center">
               <div className="reasoning-dot"></div>
             </div>
-            <span>Thought for 5 seconds</span>
-            <svg 
-              className={`w-4 h-4 transition-transform duration-200 ${isReasoningExpanded ? 'rotate-180' : ''}`}
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
+            <span className="text-xs">Thought for 5 seconds</span>
+            <span 
+              className={`ml-1 text-xs transition-transform duration-200 ${isReasoningExpanded ? 'rotate-180' : ''}`}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
+              ▼
+            </span>
           </div>
           
           {/* Expandable reasoning content */}
           {isReasoningExpanded && (
-            <div className="reasoning-content pl-6 py-3 mt-2 text-sm text-gray-400 leading-relaxed bg-gray-900/30 rounded-lg border border-gray-700/30">
-              <div className="whitespace-pre-wrap">
+            <div className="reasoning-content pl-5 py-2 mt-1 text-xs text-gray-500 leading-relaxed bg-gray-100/10 rounded-md border-l-2 border-gray-400/30">
+              <div className="whitespace-pre-wrap font-mono">
                 {reasoning}
               </div>
             </div>

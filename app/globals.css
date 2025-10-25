@@ -300,19 +300,17 @@ html, body {
 .reasoning-toggle {
   transition: all 0.2s ease;
   user-select: none;
-  padding: 0.5rem 0;
 }
 
 .reasoning-toggle:hover {
-  color: rgba(156, 163, 175, 1);
+  color: rgba(156, 163, 175, 0.8);
 }
 
 .reasoning-content {
-  background: rgba(17, 24, 39, 0.4);
-  border-left: 3px solid rgba(59, 130, 246, 0.5);
-  backdrop-filter: blur(8px);
-  animation: expandIn 0.3s ease-out;
-  margin-left: 1rem;
+  background: rgba(229, 231, 235, 0.05);
+  border-left: 2px solid rgba(156, 163, 175, 0.3);
+  animation: expandIn 0.2s ease-out;
+  font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
 }
 
 @keyframes expandIn {
@@ -324,16 +322,16 @@ html, body {
   }
   to {
     opacity: 1;
-    max-height: 1000px;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+    max-height: 500px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 }
 
 .reasoning-dot {
-  background: #3b82f6;
-  width: 6px;
-  height: 6px;
+  background: #6b7280;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
 }
 

@@ -92,7 +92,7 @@ export default function Home() {
               </p>
               {messages.map((msg, index) => (
                 <Message 
-                  key={`${msg.role}-${msg.timeStamp || index}-${index}`}
+                  key={`msg-${index}`}
                   role={msg.role} 
                   content={msg.content} 
                   reasoning={msg.reasoning || false}
