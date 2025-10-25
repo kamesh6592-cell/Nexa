@@ -96,25 +96,56 @@ const SettingsModal = ({ isOpen, onClose }) => {
                   
                   <div className="space-y-4">
                     {/* AI Model Selection */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <label className="text-white font-medium">AI Model</label>
-                        <p className="text-sm text-white/60">Choose your preferred AI model for conversations</p>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <label className={`font-medium ${
+                            theme === 'dark' ? 'text-white' : 'text-gray-900'
+                          }`}>AI Model</label>
+                          <p className={`text-sm ${
+                            theme === 'dark' ? 'text-white/60' : 'text-gray-600'
+                          }`}>Choose your preferred AI model for conversations</p>
+                        </div>
+                        <select 
+                          value={selectedModel}
+                          onChange={(e) => {
+                            selectModel(e.target.value)
+                            toast.success(`Switched to ${models.find(m => m.id === e.target.value)?.name}`)
+                          }}
+                          className={`px-3 py-2 rounded-lg border focus:outline-none focus:border-primary min-w-[200px] ${
+                            theme === 'dark' 
+                              ? 'bg-[#404045] text-white border-gray-600' 
+                              : 'bg-white text-gray-900 border-gray-300'
+                          }`}
+                        >
+                          {models.map((model) => (
+                            <option key={model.id} value={model.id}>
+                              {model.name} - {model.api}
+                            </option>
+                          ))}
+                        </select>
                       </div>
-                      <select 
-                        value={selectedModel}
-                        onChange={(e) => {
-                          selectModel(e.target.value)
-                          toast.success(`Switched to ${models.find(m => m.id === e.target.value)?.name}`)
-                        }}
-                        className="bg-[#404045] text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none focus:border-primary min-w-[200px]"
-                      >
-                        {models.map((model) => (
-                          <option key={model.id} value={model.id}>
-                            {model.name} ({model.provider})
-                          </option>
-                        ))}
-                      </select>
+                      
+                      {/* Model Info */}
+                      {(() => {
+                        const currentModel = getSelectedModel();
+                        return (
+                          <div className={`text-xs p-3 rounded-lg ${
+                            theme === 'dark' ? 'bg-gray-800/50 text-gray-300' : 'bg-gray-50 text-gray-600'
+                          }`}>
+                            <div className="flex justify-between items-center mb-1">
+                              <span className="font-medium">{currentModel.name}</span>
+                              <span className="text-primary">{currentModel.api}</span>
+                            </div>
+                            <p className="mb-2">{currentModel.description}</p>
+                            <p className={`text-xs ${
+                              theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+                            }`}>
+                              Required API Key: {currentModel.api === 'OpenRouter' ? 'OPENROUTER_API_KEY' : 'GEMINI_API_KEY'}
+                            </p>
+                          </div>
+                        );
+                      })()}
                     </div>
 
                     <div className="flex items-center justify-between">

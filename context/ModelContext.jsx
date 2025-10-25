@@ -12,13 +12,36 @@ export function ModelProvider({ children }) {
       id: 'openai/gpt-4o-mini',
       name: 'GPT-4o Mini',
       description: 'Fast and efficient model for most tasks',
-      provider: 'OpenAI'
+      provider: 'OpenAI',
+      api: 'OpenRouter'
     },
     {
       id: 'google/gemini-2.0-flash-exp',
-      name: 'Gemini 2.0 Flash',
-      description: 'Google\'s latest experimental model',
-      provider: 'Google'
+      name: 'Gemini 2.0 Flash (OpenRouter)',
+      description: 'Google\'s latest experimental model via OpenRouter',
+      provider: 'Google',
+      api: 'OpenRouter'
+    },
+    {
+      id: 'gemini-2.0-flash-exp',
+      name: 'Gemini 2.0 Flash (Direct)',
+      description: 'Google\'s latest experimental model via Gemini API',
+      provider: 'Google',
+      api: 'Gemini API'
+    },
+    {
+      id: 'gemini-1.5-pro',
+      name: 'Gemini 1.5 Pro',
+      description: 'Most capable Gemini model for complex tasks',
+      provider: 'Google',
+      api: 'Gemini API'
+    },
+    {
+      id: 'gemini-1.5-flash',
+      name: 'Gemini 1.5 Flash',
+      description: 'Fast and efficient Gemini model',
+      provider: 'Google',
+      api: 'Gemini API'
     }
   ]
 

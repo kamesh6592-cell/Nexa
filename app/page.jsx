@@ -18,8 +18,10 @@ export default function Home() {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    if (selectedChat) {
+    if (selectedChat && selectedChat.messages) {
       setMessages(selectedChat.messages);
+    } else {
+      setMessages([]);
     }
   }, [selectedChat]);
 
@@ -84,7 +86,7 @@ export default function Home() {
               <p className={`fixed top-8 border border-transparent hover:border-gray-500/50 py-1 px-2 rounded-lg font-semibold mb-6 ${
                 theme === 'dark' ? 'text-white' : 'text-gray-900'
               }`}>
-                {selectedChat.name}
+                {selectedChat?.name || 'Chat'}
               </p>
               {messages.map((msg, index) => (
                 <Message key={index} role={msg.role} content={msg.content} />

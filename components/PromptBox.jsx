@@ -27,6 +27,7 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
     try {
       e.preventDefault();
       if (!user) return toast.error("Login to send message");
+      if (!selectedChat) return toast.error("Please wait while we set up your chat");
       if (isLoading)
         return toast.error("Wait for the previous prompt response");
 
@@ -42,20 +43,23 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
       // Saving user prompt in chats array
       setChats((prevChats) =>
         prevChats.map((chat) =>
-          chat._id === selectedChat._id
+          chat._id === selectedChat?._id
             ? {
                 ...chat,
-                messages: [...chat.messages, userPrompt],
+                messages: [...(chat.messages || []), userPrompt],
               }
             : chat
         )
       );
 
-      // Saving user prompt in selected  chat
-      setSelectedChat((prev) => ({
-        ...prev,
-        messages: [...prev.messages, userPrompt],
-      }));
+      // Saving user prompt in selected chat
+      setSelectedChat((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          messages: [...(prev.messages || []), userPrompt],
+        };
+      });
 
       const { data } = await axios.post("/api/chat/ai", {
         chatId: selectedChat._id,
@@ -66,8 +70,8 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
       if (data.success) {
         setChats((prevChats) =>
           prevChats.map((chat) =>
-            chat._id === selectedChat._id
-              ? { ...chat, messages: [...chat.messages, data.data] }
+            chat._id === selectedChat?._id
+              ? { ...chat, messages: [...(chat.messages || []), data.data] }
               : chat
           )
         );
@@ -79,15 +83,19 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
           timeStamp: Date.now(),
         };
 
-        setSelectedChat((prev) => ({
-          ...prev,
-          messages: [...prev.messages, assistantMessage],
-        }));
+        setSelectedChat((prev) => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            messages: [...(prev.messages || []), assistantMessage],
+          };
+        });
 
         for (let i = 0; i < messageTokens.length; i++) {
           setTimeout(() => {
             assistantMessage.content = messageTokens.slice(0, i + 1).join(" ");
             setSelectedChat((prev) => {
+              if (!prev || !prev.messages) return prev;
               const updatedMessages = [
                 ...prev.messages.slice(0, -1),
                 assistantMessage,
@@ -152,13 +160,13 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
           <button
             type="submit"
             className={`${
-              prompt ? "bg-primary" : "bg-[#71717a]"
+              prompt && selectedChat ? "bg-primary" : "bg-[#71717a]"
             } rounded-full p-2 cursor-pointer touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center transition-colors hover:opacity-90`}
-            disabled={isLoading}
+            disabled={isLoading || !selectedChat}
           >
             <Image
               className="w-3.5 aspect-square"
-              src={prompt ? assets.arrow_icon : assets.arrow_icon_dull}
+              src={prompt && selectedChat ? assets.arrow_icon : assets.arrow_icon_dull}
               alt="arrow"
             />
           </button>

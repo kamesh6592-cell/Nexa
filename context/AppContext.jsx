@@ -66,8 +66,11 @@ export const AppContextProvider = ({ children }) => {
           );
 
           // Set recently updated chat as selected chat
-          setSelectedChat(data.data[0]);
-          console.log(data.data[0]);
+          const firstChat = data.data[0];
+          if (firstChat && firstChat._id) {
+            setSelectedChat(firstChat);
+            console.log(firstChat);
+          }
         }
       } else {
         toast.error(data.message);
@@ -80,6 +83,10 @@ export const AppContextProvider = ({ children }) => {
   useEffect(() => {
     if (user) {
       fetchUsersChats();
+    } else {
+      // Clear selectedChat when user logs out
+      setSelectedChat(null);
+      setChats([]);
     }
   }, [user]);
   

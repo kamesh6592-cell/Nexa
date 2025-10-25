@@ -4,6 +4,7 @@ export const maxDuration = 60;
 
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import connectDB from "@/config/db";
 import Chat from "@/models/Chat";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
@@ -14,16 +15,14 @@ const openai = new OpenAI({
   apiKey: process.env.OPENROUTER_API_KEY,
 });
 
+// Initialize Gemini client
+let genAI;
+if (process.env.GEMINI_API_KEY) {
+  genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+}
+
 export async function POST(req) {
   try {
-    // Check if OpenRouter API key is configured
-    if (!process.env.OPENROUTER_API_KEY) {
-      return NextResponse.json({
-        success: false,
-        message: "OpenRouter API key not configured. Please add OPENROUTER_API_KEY to your environment variables.",
-      });
-    }
-
     // Check if Supabase is configured
     if (!isSupabaseConfigured()) {
       return NextResponse.json({
@@ -56,16 +55,28 @@ export async function POST(req) {
     // Extract chatId, prompt, and model from the request body
     const { chatId, prompt, model = "openai/gpt-4o-mini" } = await req.json();
 
-    // Validate model selection
-    const supportedModels = [
-      "openai/gpt-4o-mini",
-      "google/gemini-2.0-flash-exp"
-    ];
+    // Define supported models and their API requirements
+    const modelConfig = {
+      "openai/gpt-4o-mini": { api: "openrouter", requiresKey: "OPENROUTER_API_KEY" },
+      "google/gemini-2.0-flash-exp": { api: "openrouter", requiresKey: "OPENROUTER_API_KEY" },
+      "gemini-2.0-flash-exp": { api: "gemini", requiresKey: "GEMINI_API_KEY" },
+      "gemini-1.5-pro": { api: "gemini", requiresKey: "GEMINI_API_KEY" },
+      "gemini-1.5-flash": { api: "gemini", requiresKey: "GEMINI_API_KEY" }
+    };
 
-    if (!supportedModels.includes(model)) {
+    const config = modelConfig[model];
+    if (!config) {
       return NextResponse.json({
         success: false,
-        message: `Unsupported model. Supported models: ${supportedModels.join(", ")}`,
+        message: `Unsupported model: ${model}. Supported models: ${Object.keys(modelConfig).join(", ")}`,
+      });
+    }
+
+    // Check if required API key is configured
+    if (!process.env[config.requiresKey]) {
+      return NextResponse.json({
+        success: false,
+        message: `${config.requiresKey} not configured. Please add it to your environment variables.`,
       });
     }
 
@@ -89,14 +100,29 @@ export async function POST(req) {
 
     data.messages.push(userPrompt);
 
-    // Call the OpenRouter API to get a chat completion
-    const completion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: prompt }],
-      model: model,
-      store: true,
-    });
+    let message;
 
-    const message = completion.choices[0].message;
+    // Call appropriate API based on model configuration
+    if (config.api === "openrouter") {
+      // Use OpenRouter API
+      const completion = await openai.chat.completions.create({
+        messages: [{ role: "user", content: prompt }],
+        model: model,
+        store: true,
+      });
+      message = completion.choices[0].message;
+    } else if (config.api === "gemini") {
+      // Use direct Gemini API
+      const modelInstance = genAI.getGenerativeModel({ model: model });
+      const result = await modelInstance.generateContent(prompt);
+      const response = await result.response;
+      
+      message = {
+        role: "assistant",
+        content: response.text(),
+      };
+    }
+
     message.timestamp = Date.now();
     data.messages.push(message);
     await data.save();
@@ -104,6 +130,24 @@ export async function POST(req) {
     return NextResponse.json({ success: true, data: message });
   } catch (error) {
     console.error("Chat AI Error:", error);
-    return NextResponse.json({ success: false, message: error.message });
+    
+    // Provide more specific error messages
+    let errorMessage = "An error occurred while processing your request.";
+    
+    if (error.message?.includes("API key")) {
+      errorMessage = "Invalid API key. Please check your configuration.";
+    } else if (error.message?.includes("quota")) {
+      errorMessage = "API quota exceeded. Please check your usage limits.";
+    } else if (error.message?.includes("model")) {
+      errorMessage = "Model not available. Please try a different model.";
+    } else if (error.message?.includes("network") || error.code === 'ENOTFOUND') {
+      errorMessage = "Network error. Please check your internet connection.";
+    }
+    
+    return NextResponse.json({ 
+      success: false, 
+      message: errorMessage,
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 }
