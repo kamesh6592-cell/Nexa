@@ -4,8 +4,9 @@ import { assets } from "@/assets/assets";
 import Markdown from "react-markdown";
 import Prism from "prismjs";
 import toast from "react-hot-toast";
+import { SearchSection } from "./SearchSection";
 
-const Message = ({ role, content, reasoning = false }) => {
+const Message = ({ role, content, reasoning = false, searchData = null }) => {
   useEffect(() => {
     Prism.highlightAll();
   }, [content]);
@@ -99,6 +100,18 @@ const Message = ({ role, content, reasoning = false }) => {
                     <span className="font-semibold tracking-wide">DeepThink</span>
                   </div>
                 )}
+                
+                {/* Search Results Section */}
+                {searchData && (
+                  <div className="mb-4">
+                    <SearchSection 
+                      searchData={searchData} 
+                      isLoading={false}
+                      isOpen={true}
+                    />
+                  </div>
+                )}
+                
                 <div className="prose prose-sm max-w-none text-white/90 leading-relaxed">
                   <Markdown
                     components={{

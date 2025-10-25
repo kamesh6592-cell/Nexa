@@ -94,6 +94,7 @@ export default function Home() {
                   role={msg.role} 
                   content={msg.content} 
                   reasoning={msg.reasoning || false}
+                  searchData={msg.searchData || null}
                 />
               ))}
               {isLoading && (

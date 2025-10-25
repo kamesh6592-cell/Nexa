@@ -8,6 +8,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import connectDB from "@/config/db";
 import Chat from "@/models/Chat";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { createSearchTool } from "@/lib/tools/search";
 
 // Initialize OpenRouter client
 const openai = new OpenAI({
@@ -52,8 +53,8 @@ export async function POST(req) {
       });
     }
 
-    // Extract chatId, prompt, model, and reasoning from the request body
-    const { chatId, prompt, model = "openai/gpt-4o-mini", reasoning = false } = await req.json();
+    // Extract chatId, prompt, model, reasoning, and enableSearch from the request body
+    const { chatId, prompt, model = "openai/gpt-4o-mini", reasoning = false, enableSearch = true } = await req.json();
 
     // Define supported models and their API requirements
     const modelConfig = {
@@ -98,13 +99,56 @@ export async function POST(req) {
     data.messages.push(userPrompt);
 
     let message;
+    let searchResults = null;
 
-    // Enhance prompt with reasoning instructions if reasoning is enabled
+    // Check if the query would benefit from web search
+    const shouldSearch = enableSearch && isSearchQuery(prompt);
+    
+    if (shouldSearch) {
+      try {
+        // Perform web search
+        const searchTool = createSearchTool();
+        const searchParams = {
+          query: prompt,
+          max_results: 5,
+          search_depth: "basic",
+          include_answer: false,
+          include_domains: [],
+          exclude_domains: []
+        };
+        
+        searchResults = await searchTool.execute(searchParams);
+        console.log('Search results obtained:', searchResults ? 'success' : 'failed');
+      } catch (searchError) {
+        console.error('Search error:', searchError);
+        // Continue without search results if search fails
+      }
+    }
+
+    // Enhance prompt with search results and reasoning instructions
     let enhancedPrompt = prompt;
+    
+    if (searchResults && searchResults.results && searchResults.results.length > 0) {
+      const searchContext = searchResults.results.map(result => 
+        `Source: ${result.title}\nURL: ${result.url}\nContent: ${result.content}`
+      ).join('\n\n');
+      
+      enhancedPrompt = `You have access to current web search results. Use this information to provide accurate, up-to-date answers.
+
+Search Query: ${prompt}
+
+Web Search Results:
+${searchContext}
+
+Based on the search results above and your knowledge, please provide a comprehensive answer to the user's question. If the search results are relevant, incorporate the information and cite the sources. If the search results are not relevant or you need to provide additional context, use your general knowledge while noting what information comes from the search results.
+
+User Question: ${prompt}`;
+    }
+    
     if (reasoning) {
       enhancedPrompt = `Think step by step and show your reasoning process. Be thorough in your analysis and explain your thought process clearly.
 
-User query: ${prompt}
+${enhancedPrompt}
 
 Please provide:
 1. Your reasoning process (thinking step by step)
@@ -143,6 +187,11 @@ Format your response with clear sections for reasoning and conclusion.`;
       message.reasoning = true;
     }
 
+    // Add search results to message if search was performed
+    if (searchResults) {
+      message.searchData = searchResults;
+    }
+
     message.timestamp = Date.now();
     data.messages.push(message);
     await data.save();
@@ -170,4 +219,49 @@ Format your response with clear sections for reasoning and conclusion.`;
       details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
+}
+
+/**
+ * Determines if a query would benefit from web search
+ * @param {string} query - The user's query
+ * @returns {boolean} - Whether to perform a search
+ */
+function isSearchQuery(query) {
+  const lowerQuery = query.toLowerCase();
+  
+  // Keywords that indicate current/real-time information needs
+  const searchIndicators = [
+    'latest', 'recent', 'current', 'today', 'now', 'update', 'news',
+    'what happened', 'when did', 'price of', 'stock price', 'weather',
+    'events', 'breaking', 'trending', 'this year', 'this month',
+    'compare prices', 'reviews of', 'best', 'top', 'ranking',
+    'how to', 'tutorial', 'guide', 'instructions', 'steps'
+  ];
+  
+  // Patterns that suggest real-time information needs
+  const searchPatterns = [
+    /\b(what is|what are|who is|where is|when is|how is)\b.*\b(today|now|currently|latest|recent)\b/,
+    /\b(price|cost|worth|value)\b.*\bof\b/,
+    /\b(how much|how many)\b.*\b(cost|costs|price|worth)\b/,
+    /\b(compare|comparison|vs|versus)\b/,
+    /\b(review|reviews|rating|ratings)\b/,
+    /\b(where to|where can|how to)\b.*\b(buy|purchase|get|find)\b/,
+    /\b(what happened|what's happening)\b/,
+    /\b(when did|when will|when is)\b/
+  ];
+  
+  // Check for search indicators
+  const hasSearchIndicator = searchIndicators.some(indicator => 
+    lowerQuery.includes(indicator)
+  );
+  
+  // Check for search patterns
+  const matchesSearchPattern = searchPatterns.some(pattern => 
+    pattern.test(lowerQuery)
+  );
+  
+  // Questions that likely need current information
+  const isQuestion = /^(what|who|where|when|how|why|which|is|are|can|could|would|should|do|does|did)/i.test(query);
+  
+  return hasSearchIndicator || matchesSearchPattern || (isQuestion && query.length > 10);
 }
