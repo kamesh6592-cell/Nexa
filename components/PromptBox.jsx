@@ -5,6 +5,7 @@ import Image from "next/image";
 import { assets } from "@/assets/assets";
 import { useAppContext } from "@/context/AppContext";
 import { useModel } from "@/context/ModelContext";
+import { supabase } from "@/lib/supabase";
 import toast from "react-hot-toast";
 import axios from "axios";
 
@@ -61,10 +62,17 @@ const PromptBox = ({ isLoading, setIsLoading }) => {
         };
       });
 
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+
       const { data } = await axios.post("/api/chat/ai", {
         chatId: selectedChat._id,
         prompt,
         model: selectedModel,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (data.success) {
