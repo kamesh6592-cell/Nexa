@@ -8,10 +8,10 @@ import OpenAI from "openai";
 import connectDB from "@/config/db";
 import Chat from "@/models/Chat";
 
-// Initialize OpenAI client with DeepSeek API key and base URL
+// Initialize OpenAI client with NEXA API key and base URL
 const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
-  apiKey: process.env.DEEPSEEK_API_KEY,
+  apiKey: process.env.NEXA_API_KEY || "placeholder-key",
 });
 
 export async function POST(req) {
@@ -40,7 +40,7 @@ export async function POST(req) {
 
     data.messages.push(userPrompt);
 
-    // Call the DeepSeek API to get a chat completion
+    // Call the NEXA API to get a chat completion
     const completion = await openai.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
       model: "tngtech/deepseek-r1t-chimera:free",

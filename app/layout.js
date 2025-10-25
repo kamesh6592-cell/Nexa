@@ -11,8 +11,16 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Clarix",
-  description: "Full Stack Project",
+  title: "NEXA",
+  description: "AI-Powered Chat Application",
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
+  themeColor: '#292a2d',
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({ children }) {

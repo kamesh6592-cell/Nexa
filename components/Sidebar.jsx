@@ -11,18 +11,20 @@ const Sidebar = ({ expand, setExpand }) => {
   const [openMenu, setOpenMenu] = useState({ id: 0, open: false });
   return (
     <div
-      className={`flex flex-col justify-between bg-[#212327] pt-7 transition-all z-50 max-md:absolute max-md:h-screen ${
-        expand ? "p-4 w-64" : "md:w-20 w-0 max-md:overflow-hidden"
+      className={`flex flex-col justify-between bg-[#212327] pt-4 md:pt-7 transition-all z-50 ${
+        expand 
+          ? "fixed inset-0 md:relative md:inset-auto p-4 w-full md:w-64" 
+          : "md:w-20 w-0 max-md:overflow-hidden"
       }`}
     >
       <div>
         <div
           className={`flex ${
-            expand ? "flex-row gap-10" : "flex-col items-center gap-9"
+            expand ? "flex-row gap-6 md:gap-10" : "flex-col items-center gap-9"
           }`}
         >
           <Image
-            className={expand ? "w-36" : "w-10"}
+            className={expand ? "w-28 md:w-36" : "w-10"}
             src={expand ? assets.logo_text : assets.logo_icon}
             alt="logo text"
           />
@@ -31,7 +33,7 @@ const Sidebar = ({ expand, setExpand }) => {
             onClick={() => (expand ? setExpand(false) : setExpand(true))}
             className="group relative flex items-center justify-center hover:bg-gray-500/20 transition-all duration-300 h-9 w-9 aspect-square rounded-lg cursor-pointer"
           >
-            <Image src={assets.menu_icon} className="md:hidden" alt="menu" />
+            <Image src={assets.menu_icon} className="md:hidden w-6" alt="menu" />
             <Image
               src={expand ? assets.sidebar_close_icon : assets.sidebar_icon}
               className="hidden md:block w-7"
@@ -54,12 +56,13 @@ const Sidebar = ({ expand, setExpand }) => {
             </div>
           </div>
         </div>
+        
         <button
           onClick={createNewChat}
-          className={`mt-8 flex items-center justify-center cursor-pointer ${
+          className={`mt-6 md:mt-8 flex items-center justify-center cursor-pointer touch-manipulation ${
             expand
-              ? "bg-primary hover:opacity-90 rounded-2xl gap-2 p-2.5 w-max"
-              : "group relative h-9 w-9 mx-auto hover:bg-gray-500/30 rounded-lg"
+              ? "bg-primary hover:opacity-90 rounded-2xl gap-2 p-2.5 w-full md:w-max"
+              : "group relative h-10 w-10 mx-auto hover:bg-gray-500/30 rounded-lg"
           }`}
         >
           <Image
@@ -67,34 +70,36 @@ const Sidebar = ({ expand, setExpand }) => {
             src={expand ? assets.chat_icon : assets.chat_icon_dull}
             alt="chat icon"
           />
-          <div className="absolute w-max -top-12 -right-12 opacity-0 group-hover:opacity-100 transition b-black text-white text-sm px-3 py-2 rounded-lg shadow-lg pointer-events-none">
+          <div className="absolute w-max -top-12 -right-12 opacity-0 group-hover:opacity-100 transition bg-black text-white text-sm px-3 py-2 rounded-lg shadow-lg pointer-events-none">
             New Chat
             <div className="w-3 h-3 absolute bg-black rotate-45 left-4 -bottom-1.5"></div>
           </div>
-          {expand && <p className="text-white text-font-medium">New Chat</p>}
+          {expand && <p className="text-white font-medium">New Chat</p>}
         </button>
 
         <div
-          className={`mt-8 text-white/25 text-sm ${
+          className={`mt-6 md:mt-8 text-white/25 text-sm ${
             expand ? "block" : "hidden"
           }`}
         >
           <p className="my-1">Recents</p>
-          {chats.map((chat, index) => (
-            <ChatLabel
-              key={index}
-              name={chat.name}
-              id={chat._id}
-              openMenu={openMenu}
-              setOpenMenu={setOpenMenu}
-            />
-          ))}
+          <div className="max-h-64 md:max-h-96 overflow-y-auto">
+            {chats.map((chat, index) => (
+              <ChatLabel
+                key={index}
+                name={chat.name}
+                id={chat._id}
+                openMenu={openMenu}
+                setOpenMenu={setOpenMenu}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
-      <div>
+      <div className="pb-4 md:pb-0">
         <div
-          className={`flex items-center cursor-pointer group relative ${
+          className={`flex items-center cursor-pointer group relative touch-manipulation ${
             expand
               ? "gap-1 text-white/80 text-sm p-2.5 border border-primary rounded-lg hover:bg-white/10 cursor-pointer"
               : "h-10 w-10 mx-auto hover:bg-gray-500/30 rounded-lg"
@@ -112,7 +117,7 @@ const Sidebar = ({ expand, setExpand }) => {
           >
             <div className="relative w-max bg-black text-white text-sm p-3 rounded-lg shadow-lg">
               <Image src={assets.qrcode} className="w-44" alt="qrcode" />
-              <p>Scan to get Clarix App</p>
+              <p>Scan to get NEXA App</p>
               <div
                 className={`w-3 h-3 absolute bg-black rotate-45 ${
                   expand ? "right-1/2" : "left-4"
@@ -130,12 +135,14 @@ const Sidebar = ({ expand, setExpand }) => {
 
         <div
           onClick={user ? null : openSignIn}
-          className={`flex items-center ${
+          className={`flex items-center touch-manipulation ${
             expand ? "hover:bg-white/10 rounded-lg" : "justify-center w-full"
           } gap-3 text-white/60 text-sm p-2 mt-2 cursor-pointer`}
         >
           {user ? (
-            <UserButton />
+            <div className="min-h-[44px] min-w-[44px] flex items-center justify-center">
+              <UserButton />
+            </div>
           ) : (
             <Image src={assets.profile_icon} className="w-7" alt="profile" />
           )}

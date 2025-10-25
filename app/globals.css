@@ -8,9 +8,27 @@ html {
   @apply scroll-smooth;
 }
 
+/* Mobile-first responsive design */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 /* hide the scroll bar from the web page */
 ::-webkit-scrollbar {
   display: none;
+}
+
+/* Enhanced scrollbar for mobile */
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .loader div:nth-child(2) {
@@ -23,8 +41,48 @@ html {
 
 code {
   white-space: pre-wrap !important;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 pre {
   border-radius: 10px !important;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .mobile-chat-container {
+    height: 100vh;
+    height: 100dvh; /* Use dynamic viewport height for mobile */
+    overflow: hidden;
+  }
+  
+  .mobile-messages {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Touch-friendly interactions */
+  button, .cursor-pointer {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Prevent zoom on input focus */
+  input, textarea, select {
+    font-size: 16px;
+  }
+}
+
+/* Safe area insets for mobile devices */
+@supports (padding: max(0px)) {
+  .safe-area-bottom {
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+  
+  .safe-area-top {
+    padding-top: max(16px, env(safe-area-inset-top));
+  }
 }
