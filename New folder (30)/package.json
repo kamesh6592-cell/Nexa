@@ -1,0 +1,24 @@
+{
+  "name": "aj-studioz-creative-suite",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Run the dev server'",
+    "build": "rm -f ImageAnalyzer.tsx && mkdir -p public && cp index.html public/ && esbuild index.tsx --bundle --outfile=public/bundle.js --jsx=automatic --loader:.js=jsx --define:process.env.NODE_ENV='\"production\"'"
+  },
+  "dependencies": {
+    "@google/genai": "^1.28.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^5.1.0",
+    "esbuild": "^0.23.0",
+    "typescript": "^5.5.3",
+    "vite": "^7.1.12"
+  }
+}
