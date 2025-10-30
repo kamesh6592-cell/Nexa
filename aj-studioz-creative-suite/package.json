@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "esbuild src/index.tsx --bundle --outfile=public/bundle.js --jsx=automatic --loader:.js=jsx --define:process.env.NODE_ENV='\"development\"' --external:react --external:react-dom --external:react/jsx-runtime --external:@google/genai --external:react-markdown --external:remark-gfm --watch --serve=8080 --servedir=public",
-    "build": "if exist public\\bundle.js del public\\bundle.js && if exist public\\bundle.js.map del public\\bundle.js.map && esbuild src/index.tsx --bundle --outfile=public/bundle.js --jsx=automatic --loader:.js=jsx --define:process.env.NODE_ENV='\"production\"' --external:react --external:react-dom --external:react/jsx-runtime --external:@google/genai --external:react-markdown --external:remark-gfm --minify --sourcemap",
+    "dev": "esbuild src/index.tsx --bundle --outfile=public/bundle.js --jsx=automatic --loader:.js=jsx --define:process.env.NODE_ENV='\"development\"' --format=iife --global-name=App --watch --serve=8080 --servedir=public",
+    "build": "if exist public\\bundle.js del public\\bundle.js && if exist public\\bundle.js.map del public\\bundle.js.map && esbuild src/index.tsx --bundle --outfile=public/bundle.js --jsx=automatic --loader:.js=jsx --define:process.env.NODE_ENV='\"production\"' --format=iife --global-name=App --minify --sourcemap",
     "start": "npm run build && npx serve public",
     "preview": "npm run build && npx serve public -p 3000",
     "clean": "if exist public\\bundle.js del public\\bundle.js && if exist public\\bundle.js.map del public\\bundle.js.map",
