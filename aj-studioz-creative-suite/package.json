@@ -1,0 +1,27 @@
+{
+  "name": "aj-studioz-creative-suite",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "esbuild src/index.tsx --bundle --outfile=public/bundle.js --jsx=automatic --loader:.js=jsx --define:process.env.NODE_ENV='\"development\"' --external:react --external:react-dom --external:react/jsx-runtime --external:@google/genai --external:react-markdown --external:remark-gfm --watch --serve=8080 --servedir=public",
+    "build": "if exist public\\bundle.js del public\\bundle.js && if exist public\\bundle.js.map del public\\bundle.js.map && esbuild src/index.tsx --bundle --outfile=public/bundle.js --jsx=automatic --loader:.js=jsx --define:process.env.NODE_ENV='\"production\"' --external:react --external:react-dom --external:react/jsx-runtime --external:@google/genai --external:react-markdown --external:remark-gfm --minify --sourcemap",
+    "start": "npm run build && npx serve public",
+    "preview": "npm run build && npx serve public -p 3000",
+    "clean": "if exist public\\bundle.js del public\\bundle.js && if exist public\\bundle.js.map del public\\bundle.js.map",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/genai": "^1.28.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "esbuild": "^0.23.0",
+    "serve": "^14.2.5",
+    "typescript": "^5.5.3"
+  }
+}
